@@ -5,17 +5,45 @@ public class CardTesting {
 	public static void main(String[] args) {
 
 		Deck d = new Deck();
-		ArrayList<Card> s = new ArrayList<Card>(); 
-		//System.out.println(d.cardsMade()); 
-		
+		Hand h = new Hand();
+		//System.out.println(d.cardsMade());
+
 		d.shuffle();
-		s = d.dealCards(); 
-		System.out.println(d.toString()); 
-		
-		System.out.println(s.toString());
-		
+		h.addCards(d.dealCards());
+
+		System.out.println(d.toString());
+
+		System.out.println(h.toString());
+
 		System.out.println(d.cardsLeft());
+
+		h.sortHand();
+
+		System.out.println(h.toString());
+
+		System.out.println(h.cardsRemaining());
+
+		System.out.println(h.getCards());
+
+		h.clearCards();
+
+		System.out.println(h.toString());
+
+		System.out.println("<-----------Break------------>");
+
+		h.addCards(d.dealCards());
+
+		System.out.println(d.toString());
+		System.out.println(d.cardsLeft());
+
+
+		System.out.println(h.toString());
+		h.sortHand();
+		System.out.println(h.toString());
 		
+		System.out.println(h.getCardByIndex(0).getSuit());
+
+
 	}
 
 }
