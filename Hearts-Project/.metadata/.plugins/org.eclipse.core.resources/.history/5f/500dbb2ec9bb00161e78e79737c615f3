@@ -1,0 +1,15 @@
+import java.util.ArrayList;
+
+public class Trick {
+	
+	private Player winner;
+	private ArrayList<Card> trickCards;
+	private Card queenSpade;
+	private ArrayList<Card> heartCards; 
+	
+	public Trick() {
+		trickCards = new ArrayList<Card>();
+		queenSpade = new Card(Suit.SPADES, 12); 
+	}
+
+}

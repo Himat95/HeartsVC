@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class Hand {
 
@@ -22,7 +23,16 @@ public class Hand {
 	}
 
 	public void removeCard(Card c) {
-		hand.remove(this.getCard(c)); 
+		
+		for (Iterator<Card> it = hand.iterator(); it.hasNext();) {
+			Card temp = it.next(); 
+			if (temp.equals(c)) {
+				it.remove();
+			}
+		}
+		
+		
+		//hand.remove(c); 
 		used.add(c);
 	}
 
@@ -47,7 +57,7 @@ public class Hand {
 		return hand.size();
 	}
 
-	// <------------------might wanna change these later----------->
+	
 	public Card getCardByIndex(int i) {
 		return hand.get(i);
 	}
@@ -57,11 +67,15 @@ public class Hand {
 	}
 	
 	public Card getCard(Card c) {
-		int i = hand.indexOf(c);
-		return hand.get(i+1); 
+		for (Iterator<Card> it = hand.iterator(); it.hasNext();) {
+			Card temp = it.next(); 
+			if (temp.equals(c)) {
+				return temp; 
+			}
+		}
+		return c;
 	}
-	// <------------------might wanna change these later----------->
-
+	
 
 	public void sortHand() {
 		Collections.sort(hand);

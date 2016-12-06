@@ -1,0 +1,52 @@
+
+public class Player implements AbstractPlayer {
+
+	@Override
+	public void setPlayerName(String s) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getPlayerName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setScore() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public int getScore() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void incScore() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void decScore() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setPlayerId() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public AbstractPlayer getPlayerId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

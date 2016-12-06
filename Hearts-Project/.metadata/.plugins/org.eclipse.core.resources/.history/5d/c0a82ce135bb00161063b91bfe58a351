@@ -1,0 +1,15 @@
+
+public interface AbstractPlayer {
+
+	public void setPlayerName(String s); 
+	public String getPlayerName(); 
+	
+	public void setScore(int i); 
+	public int getScore(); 
+	public void incScore();
+	public void decScore(); 
+	
+	public void setPlayerId(int i);
+	public AbstractPlayer getPlayerId(); 
+	
+}

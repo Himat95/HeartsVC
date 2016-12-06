@@ -1,0 +1,52 @@
+
+public class AIPlayer implements Player {
+
+	@Override
+	public void setPlayerName(String s) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getPlayerName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setScore(int i) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public int getScore() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void incScore() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void decScore() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setPlayerId(int i) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Player getPlayerId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

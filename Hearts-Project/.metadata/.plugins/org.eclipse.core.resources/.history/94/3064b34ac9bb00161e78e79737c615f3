@@ -1,0 +1,57 @@
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Trick {
+	
+	private Player winner;
+	private ArrayList<Card> trickCards;
+	private Card queenSpade;
+	private ArrayList<Card> heartCards; 
+	private int scoreCount; 
+	
+	public Trick() {
+		trickCards = new ArrayList<Card>();
+		queenSpade = new Card(Suit.SPADES, 12); 
+		heartCards = new ArrayList<Card>();
+		scoreCount = 0; 
+		
+		for (int i = 2; i < 15; i++) {
+			heartCards.add(new Card(Suit.HEARTS, i)); 
+		}
+	}
+	
+	
+	public void setWinner(Player p) {
+		winner = p;
+	}
+	
+	public int getWinner() {
+		return winner.getPlayerId(); 
+	}
+	
+	public void sortTrick() {
+		Collections.sort(trickCards);
+	}
+	
+	public ArrayList<Card> getTrickCards() {
+		return trickCards;
+	}
+	
+	public void addtoTrick(Card c) {
+		trickCards.add(c); 
+	}
+	
+	public int calculateScore() {
+		this.sortTrick();
+		
+		for (int i = 0; i < 5; i++) {
+			if (trickCards.iterator().next() == queenSpade) {
+				scoreCount += 13; 
+			}
+			
+			else {
+				trickCards.forEach(x -> x.equals(heartCards.iterator().next()));
+			}
+		}
+	}
+}

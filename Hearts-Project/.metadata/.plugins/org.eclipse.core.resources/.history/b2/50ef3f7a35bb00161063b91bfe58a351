@@ -1,0 +1,11 @@
+
+public interface AbstractPlayer {
+
+	public String setPlayerName(); 
+	public void getPlayerName(); 
+	
+	public int setScore(); 
+	public int getScore(); 
+	
+	
+}
