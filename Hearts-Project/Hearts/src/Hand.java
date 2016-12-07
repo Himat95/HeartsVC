@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Random;
 
 public class Hand {
 
@@ -81,14 +82,16 @@ public class Hand {
 		Collections.sort(hand);
 	}
 
-	public Card throwCard(Card c) {
-		if (hand.contains(c)) {
-			hand.remove(c);
+	public Card throwCard() {
+		Random rand = new Random(); 
+		/*	hand.remove(c);
 			this.thrown = c;
-			return c;
-		}
-		else
-			return null;
+			return c;*/
+		int n = rand.nextInt(12);
+		this.thrown = hand.get(n); 
+		hand.remove(n); 
+		return thrown;  
+		
 	}
 
 	public Card lastThrownCard() {

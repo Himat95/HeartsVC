@@ -26,7 +26,8 @@ public class Trick {
 	}
 	
 	public int getWinner() {
-		return winner.getPlayerId(); 
+		int n = winner.getPlayerId(); 
+		return n; 
 	}
 	
 	public void sortTrick() {
@@ -70,6 +71,10 @@ public class Trick {
 			return true; 
 		}
 			return false; 
+	}
+	
+	public String toString() {
+		return "Current Trick has: " + trickCards.toString();
 	}
 		
 }

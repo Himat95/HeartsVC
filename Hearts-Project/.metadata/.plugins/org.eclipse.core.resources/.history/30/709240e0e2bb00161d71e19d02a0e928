@@ -33,7 +33,6 @@ public class DeckTests {
 	@Test
 	public void test04() {
 		Deck d = new Deck();
-		Deck d1 = new Deck();
 		Card c = d.getCard(0);
 		System.out.println(c.toString());
 		assertTrue("Getting correct values for cards, retrieving 2 of spades", d.getCard(0) == c);
@@ -65,27 +64,47 @@ public class DeckTests {
 	@Test
 	public void test07() {
 		Deck d = new Deck(); 
-		Hand h = new Hand(d.dealCards()); 
-		//h.addCards(d.dealCards());
-		System.out.println("\t" + h.cardsRemaining());
+		Hand h = new Hand(); 
+		h.addCards(d.dealCards());
 		assertTrue("Hand has successfully added cards from deck", h.cardsRemaining() != 0); 
 	}
 	
 	@Test
 	public void test08() {
 		Deck d = new Deck(); 
-		Deck d1 = new Deck(); 
-		Hand h = new Hand(d.dealCards()); 
+		//Deck d1 = new Deck(); 
+		Hand h = new Hand(); 
 		Card c = new Card(Suit.SPADES, 2);
-		//h.addCards(d.dealCards());
+		h.addCards(d.dealCards());
+		
+		//System.out.println(h.getCardByIndex(0)); 
+		System.out.println("hand:" + h.getCards());
 		h.removeCard(c);
 		//h.removeCard(d1.getCard(0));
-		System.out.println(d1.getCard(0)); 
-		System.out.println(c); 
-		System.out.println("nulled?" + h.getCard(0));
-		System.out.println("nulled?" + h.getCards());
-		System.out.println(d1.getCard(0).equals(c));
-		assertTrue("The Card 2 of Spades is deleted from the hand", h.getCard(0).compareTo(c) != 0);
+		//System.out.println(d1.getCard(0)); 
+		//System.out.println(c); 
+		//System.out.println("hand:" + h.getCardByIndex(0));
+		System.out.println("handafter:" + h.getCards());
+		//System.out.println(d1.getCard(0).equals(c));
+		assertFalse("The Card 2 of Spades is deleted from the hand", h.getCardByIndex(0).compareTo(c) == 0);
+	}
+	
+	@Test
+	public void test09() {
+		Deck d = new Deck(); 
+		Hand h = new Hand(); 
+		h.addCards(d.dealCards());
+		h.clearCards();
+		assertFalse("Clearing all the cards within hand", h.cardsRemaining() != 0); 
+	}
+	
+	@Test
+	public void test10() {
+		Deck d = new Deck();
+		Hand h = new Hand(); 
+		h.addCards(d.dealCards());
+		h.throwCard(h.getCard(new Card(Suit.SPADES, 2))); 
+		assertTrue("After being dealt 13 cards, 1 card is thrown", h.cardsRemaining() != 13); 
 	}
 
 

@@ -10,6 +10,7 @@ public interface Player {
 	void decScore(); 
 	
 	void setPlayerId(int i);
-	int getPlayerId(); 
+	int getPlayerId();
+	Hand getPlayerHand(); 
 	
 }

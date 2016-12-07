@@ -70,7 +70,7 @@ public class Card implements Comparable<Card>{
 		if (this.suit.getSuitValue() == o.suit.getSuitValue()) {
 			return this.value == o.value; 
 		}
-		return this.value == o.value; 
+		return false; 
 	}
 
 

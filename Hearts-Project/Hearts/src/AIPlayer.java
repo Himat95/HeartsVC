@@ -54,9 +54,14 @@ public class AIPlayer implements Player {
 		return playerId; 
 	}
 	
+	@Override
+	public Hand getPlayerHand() {
+		return hand; 
+	}
+	
 	@Override 
 	public String toString() {
-		return "Player: " + playerName + "\t Player Score: " + playerScore; 
+		return "Player ID: " + playerId + " \t " + "Player: " + playerName + "\t Player Score: " + playerScore; 
 	}
 	
 	

@@ -72,7 +72,7 @@ public class DeckTests {
 	@Test
 	public void test08() {
 		Deck d = new Deck(); 
-		Deck d1 = new Deck(); 
+		//Deck d1 = new Deck(); 
 		Hand h = new Hand(); 
 		Card c = new Card(Suit.SPADES, 2);
 		h.addCards(d.dealCards());
@@ -103,7 +103,8 @@ public class DeckTests {
 		Deck d = new Deck();
 		Hand h = new Hand(); 
 		h.addCards(d.dealCards());
-		h.throwCard(h.getCard(new Card(Suit.SPADES, 2))); 
+		//h.throwCard(h.getCard(new Card(Suit.SPADES, 2))); 
+		h.throwCard(); 
 		assertTrue("After being dealt 13 cards, 1 card is thrown", h.cardsRemaining() != 13); 
 	}
 
