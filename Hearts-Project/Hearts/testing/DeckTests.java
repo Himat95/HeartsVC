@@ -26,7 +26,6 @@ public class DeckTests {
 		for (int i = 1; i < 52; i++) {
 			identical = d.getCard(0) == d.getCard(i);
 		}
-
 		assertTrue("There are 52 unique cards, none of them are identical", identical == false);
 	}
 
@@ -72,20 +71,12 @@ public class DeckTests {
 	@Test
 	public void test08() {
 		Deck d = new Deck(); 
-		//Deck d1 = new Deck(); 
 		Hand h = new Hand(); 
 		Card c = new Card(Suit.SPADES, 2);
 		h.addCards(d.dealCards());
-		
-		//System.out.println(h.getCardByIndex(0)); 
 		System.out.println("hand:" + h.getCards());
 		h.removeCard(c);
-		//h.removeCard(d1.getCard(0));
-		//System.out.println(d1.getCard(0)); 
-		//System.out.println(c); 
-		//System.out.println("hand:" + h.getCardByIndex(0));
 		System.out.println("handafter:" + h.getCards());
-		//System.out.println(d1.getCard(0).equals(c));
 		assertFalse("The Card 2 of Spades is deleted from the hand", h.getCardByIndex(0).compareTo(c) == 0);
 	}
 	
@@ -103,7 +94,6 @@ public class DeckTests {
 		Deck d = new Deck();
 		Hand h = new Hand(); 
 		h.addCards(d.dealCards());
-		//h.throwCard(h.getCard(new Card(Suit.SPADES, 2))); 
 		h.throwCard(); 
 		assertTrue("After being dealt 13 cards, 1 card is thrown", h.cardsRemaining() != 13); 
 	}

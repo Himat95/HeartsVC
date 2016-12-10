@@ -31,9 +31,6 @@ public class Hand {
 				it.remove();
 			}
 		}
-		
-		
-		//hand.remove(c); 
 		used.add(c);
 	}
 
@@ -83,15 +80,16 @@ public class Hand {
 	}
 
 	public Card throwCard() {
-		Random rand = new Random(); 
+		//Random rand = new Random(); 
 		/*	hand.remove(c);
 			this.thrown = c;
 			return c;*/
-		int n = rand.nextInt(12);
-		this.thrown = hand.get(n); 
-		hand.remove(n); 
-		return thrown;  
+		//int n = rand.nextInt(12);
 		
+		thrown = hand.stream().parallel().findAny().get();
+		hand.remove(thrown); 
+		return thrown;  
+			
 	}
 
 	public Card lastThrownCard() {
