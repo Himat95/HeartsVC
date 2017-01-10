@@ -91,7 +91,7 @@ public class AIPlayer implements Player {
 		}
 		sotm.add(new Card(Suit.SPADES, 12)); 
 		
-		return trickCardsWon.contains(sotm);
+		return trickCardsWon.containsAll(sotm);
 	}
 	
 	@Override
@@ -99,6 +99,4 @@ public class AIPlayer implements Player {
 		Collections.sort(trickCardsWon);
 	}
 	
-	
-
 }

@@ -4,6 +4,9 @@ public class CardTesting {
 
 	public static void main(String[] args) {
 
+		// <------------------------This is a personal testing class where i test out some methods and coding before putting it in game-------------------->
+		//<--------------------------Also used for debugging and error checkings ---------------------------------------->
+		
 		Deck d = new Deck();
 		Hand h = new Hand();
 		//System.out.println(d.cardsMade());

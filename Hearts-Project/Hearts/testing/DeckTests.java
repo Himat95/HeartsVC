@@ -4,6 +4,7 @@ import org.junit.Test;
 
 public class DeckTests {
 
+	//Please add JUnit4 library to the path to allow Junit complier to work
 // <---------------------------------------Deck Tests------------------------------------------->
 	
 	@Test

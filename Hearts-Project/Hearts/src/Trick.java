@@ -83,7 +83,7 @@ public class Trick {
 		scoreCount = 0; 
 	}
 	
-/*	public boolean hasPlayerShotOverTheMoon() {
+/*	public boolean hasPlayerShotOverTheMoon() { //This method is given to the player class now
 		if (scoreCount == 26) {
 			return true; 
 		}

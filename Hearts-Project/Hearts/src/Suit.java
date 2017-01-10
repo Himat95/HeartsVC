@@ -14,5 +14,4 @@ public enum Suit {
 	public int getSuitValue() {
 		return suits; 
 	}
-		
 }

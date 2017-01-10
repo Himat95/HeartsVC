@@ -78,14 +78,7 @@ public class BasicGame {
 			// that player the score and give the winner all the trick cards
 
 			
-			players.forEach(x -> x.sortTrickCardsWon()); //Organise the trick cards
-			
-			players.iterator().forEachRemaining(x -> {
-				if (x.ShotOverTheMoon() == true) {
-					players.iterator().forEachRemaining(x1 -> x1.setScore(26));
-					x.resetScore();
-				}
-			});
+
 			
 			// Print out the current state of the player objects (Their cards, scores and won cards)
 			players.forEach(x -> System.out.println("Current Cards: " + x.getPlayerHand().getCards() + "\n \n"));
@@ -97,5 +90,18 @@ public class BasicGame {
 			table.incTrickNo();
 			// increment the loop and clear the trick for the next set of cards
 		}
+		
+		players.forEach(x -> x.sortTrickCardsWon()); //Organise the trick cards
+		
+		players.iterator().forEachRemaining(x -> {
+			if (x.ShotOverTheMoon()) {
+				players.iterator().forEachRemaining(x1 -> x1.setScore(26));	
+				x.resetScore();
+			}
+		});
+		
+		players.forEach(x -> System.out.println("Current Cards: " + x.getPlayerHand().getCards() + "\n \n"));
+		players.forEach(x -> System.out.println(x.toString() + "\n"));
+		players.forEach(x -> System.out.println("\n Held Trick Cards: " + x.getTrickCardsWon() + "\n"));
 	}
 }

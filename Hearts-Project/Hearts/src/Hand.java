@@ -45,10 +45,9 @@ public class Hand {
 	}
 
 
-	public void swapCards(ArrayList<Card> ac2, ArrayList<Card> ac) {
+	public void swapCards(ArrayList<Card> ac2, ArrayList<Card> ac) { //Does not work yet
 		this.addCards(ac2);
 		this.removeCards(ac);
-
 	}
 
 	public int cardsRemaining() {
@@ -84,7 +83,7 @@ public class Hand {
 		/*	hand.remove(c);
 			this.thrown = c;
 			return c;*/
-		//int n = rand.nextInt(12);
+		//int n = rand.nextInt(12); // Created arraybound errors
 		
 		thrown = hand.stream().parallel().findAny().get();
 		hand.remove(thrown); 
@@ -104,7 +103,6 @@ public class Hand {
 	public String toString() {
 		return hand.toString(); 
 	}
-
 
 }
 
