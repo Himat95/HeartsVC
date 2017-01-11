@@ -65,12 +65,15 @@ public class Card implements Comparable<Card>{
 		}
 		return Integer.compare(this.suit.getSuitValue(), o.suit.getSuitValue());
 	}
-	
-	public boolean equals(Card o) {
-		if (this.suit.getSuitValue() == o.suit.getSuitValue()) {
-			return this.value == o.value; 
+
+	@Override
+	public boolean equals(Object o) {
+		Card obj = (Card)o;
+
+		if (this.suit.getSuitValue() == obj.suit.getSuitValue()) {
+			return this.value == obj.value;
 		}
-		return false; 
+		return false;
 	}
 
 
