@@ -42,9 +42,6 @@ public class BasicGame {
 
 
 
-
-
-
 		// --------------------------------Game Play--------------------------------------
 
 		Trick trick = table.newTrick(); //initialise a trick (takes a card each from players)

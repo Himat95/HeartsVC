@@ -91,6 +91,12 @@ public class Hand {
 		return thrown;  
 			
 	}
+	
+	public Card throwExactCard(Card c) {
+		thrown = c; 
+		hand.remove(c); 
+		return thrown;
+	}
 
 	public Card lastThrownCard() {
 		return this.thrown;
@@ -98,6 +104,10 @@ public class Hand {
 
 	public ArrayList<Card> getUsedCards() {
 		return used;
+	}
+	
+	public boolean contains(Card c) {
+		return hand.contains(c);
 	}
 
 	@Override

@@ -1,0 +1,34 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+interface Player {
+	
+	static String playerName;
+	int playerScore;
+	int playerId;
+	Hand hand;
+	ArrayList<Card> trickCardsWon;
+	ArrayList<Card> suitableCards = new ArrayList<Card>();;
+	ArrayList<Card> sotm = new ArrayList<>();
+	
+	
+
+	void setPlayerName(String s);
+	String getPlayerName();
+
+	void setScore(int i);
+	int getScore();
+	void incScore();
+	void decScore();
+	void resetScore();
+
+	void setPlayerId(int i);
+	int getPlayerId();
+	Hand getPlayerHand();
+	ArrayList<Card> getTrickCardsWon();
+	void addToTrickCardsWon(ArrayList<Card> tc);
+	boolean ShotOverTheMoon();
+	void sortTrickCardsWon();
+	ArrayList<Card> getsotm();
+}

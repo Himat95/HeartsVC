@@ -1,6 +1,8 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.*;
+import java.util.stream.Stream;
 
 public class AIPlayer extends Thread implements Player{
 
@@ -11,6 +13,9 @@ public class AIPlayer extends Thread implements Player{
 	private ArrayList<Card> trickCardsWon;
 	private ArrayList<Card> suitableCards = new ArrayList<Card>();;
 	private ArrayList<Card> sotm = new ArrayList<>();
+	private boolean startstate = false; 
+	private Trick trick;
+	private Table table;
 
 
 	public AIPlayer(int id) {
@@ -28,21 +33,33 @@ public class AIPlayer extends Thread implements Player{
 		Collections.sort(sotm);
 	}
 
+	
 	public void run() {
+		
+		if (startstate == true) {
 		this.getPlayerHand().getCards().forEach(x -> {
 			if (x.equals(new Card(Suit.CLUBS, 2))) {
-				this.getPlayerHand().throwCard();
+				this.getPlayerHand().throwExactCard(new Card(Suit.CLUBS, 2));
 		}
 			else { try {
 				wait();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				System.err.println("Failed to wait (Clubs 2)");
 				e.printStackTrace();
 			} }
 				});
+		}
+		
+		else {
+			
 
-		switch (this.trickCardsWon.get(0).getSuit()) {
-			case SPADES: suitableCards.addAll(this.getPlayerHand().getCards()); break;
+			if (trick.getTrickCards().isEmpty() == true) {
+				//Write throwing code when its empty
+			}
+			else {
+				
+		switch (trick.getTrickCards().get(0).getSuit()) {
+			case SPADES: suitableCards.addAll(Arrays.stream(this.hand.getCards().iterator().next().getSuit().getSuitValue()); break;
 			case CLUBS: suitableCards.addAll(this.getPlayerHand().getCards()); break;
 			case DIAMONDS: suitableCards.addAll(this.getPlayerHand().getCards()); break;
 			default: suitableCards.addAll(this.getPlayerHand().getCards());
@@ -55,7 +72,7 @@ public class AIPlayer extends Thread implements Player{
 		else {
 		Collections.sort(suitableCards);
 		suitableCards.forEach(x -> {
-			if (x -> x.getValue() < //table card thrown){
+			if (x -> x.getValue() < Table.this.getTrickNo()) //table card thrown){
 					ArrayList<Card> sizeable = new ArrayList<Card>();
 			Collections.sort(sizeable);
 			sizeable.stream.forEachRemaining(x -> {
@@ -67,9 +84,10 @@ public class AIPlayer extends Thread implements Player{
 
 			}
 
-
+		}
 	}
 
+	
 	@Override
 	public void setPlayerName(String s) {
 		playerName = s;
