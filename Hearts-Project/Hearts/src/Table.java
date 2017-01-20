@@ -6,11 +6,13 @@ public class Table {
 	private int turn; 
 	private boolean heartStateOn;
 	private Trick trick; 
+	private boolean gameFinished; 
 	
 	public Table() {
 		round = 0; 
 		trickNo = 0; 
 		heartStateOn = true;
+		gameFinished = false; 
 	}
 	
 	public int getRound() {
@@ -60,6 +62,14 @@ public class Table {
 	
 	public boolean getHeartState() {
 		return heartStateOn; 
+	}
+	
+	public void setIsGameFinished(boolean b) {
+		gameFinished = b; 
+	}
+	
+	public boolean getIsGameFinished() {
+		return gameFinished; 
 	}
 	
 }

@@ -3,6 +3,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.*;
 import java.util.stream.Stream;
+import java.util.function.*;
 
 public class AIPlayer extends Thread implements Player{
 
@@ -16,6 +17,7 @@ public class AIPlayer extends Thread implements Player{
 	private boolean startstate = false; 
 	private Trick trick;
 	private Table table;
+	private Card drop;
 
 
 	public AIPlayer(int id) {
@@ -35,58 +37,111 @@ public class AIPlayer extends Thread implements Player{
 
 	
 	public void run() {
-		
-		if (startstate == true) {
-		this.getPlayerHand().getCards().forEach(x -> {
-			if (x.equals(new Card(Suit.CLUBS, 2))) {
-				this.getPlayerHand().throwExactCard(new Card(Suit.CLUBS, 2));
-		}
-			else { try {
-				wait();
-			} catch (Exception e) {
-				System.err.println("Failed to wait (Clubs 2)");
-				e.printStackTrace();
-			} }
+
+		while (table.getIsGameFinished() == false) {
+
+			if (startstate == true) {
+				this.getPlayerHand().getCards().forEach(x -> {
+					if (x.equals(new Card(Suit.CLUBS, 2))) {
+						this.getPlayerHand().throwExactCard(new Card(Suit.CLUBS, 2));
+					} else {
+						try {
+							wait();
+						} catch (Exception e) {
+							System.err.println("Failed to wait (Clubs 2)");
+							e.printStackTrace();
+						}
+					}
 				});
-		}
-		
-		else {
-			
-
-			if (trick.getTrickCards().isEmpty() == true) {
-				//Write throwing code when its empty
 			}
+
 			else {
-				
-		switch (trick.getTrickCards().get(0).getSuit()) {
-			case SPADES: suitableCards.addAll(Arrays.stream(this.hand.getCards().iterator().next().getSuit().getSuitValue()); break;
-			case CLUBS: suitableCards.addAll(this.getPlayerHand().getCards()); break;
-			case DIAMONDS: suitableCards.addAll(this.getPlayerHand().getCards()); break;
-			default: suitableCards.addAll(this.getPlayerHand().getCards());
-		}
 
-		if (suitableCards.isEmpty()) {
-			//THROW ERRORS!
-		}
+				if (table.getTurn() == this.playerId) {
 
-		else {
-		Collections.sort(suitableCards);
-		suitableCards.forEach(x -> {
-			if (x -> x.getValue() < Table.this.getTrickNo()) //table card thrown){
-					ArrayList<Card> sizeable = new ArrayList<Card>();
-			Collections.sort(sizeable);
-			sizeable.stream.forEachRemaining(x -> {
-				.Filter(x < )
+					if (trick.getTrickCards().isEmpty() == true) {
+						// Write throwing code when its empty
+					}
+
+					else {
+						drop = trick.getTrickCards().get(0);
+
+						switch (drop.getSuit()) {
+						case SPADES:
+							hand.getCards().forEach(x -> {
+								if (x.getSuit() == Suit.SPADES)
+									suitableCards.add(x);
+							});
+							break;
+
+						case CLUBS:
+							hand.getCards().forEach(x -> {
+								if (x.getSuit() == Suit.CLUBS)
+									suitableCards.add(x);
+							});
+							break;
+						case DIAMONDS:
+							hand.getCards().forEach(x -> {
+								if (x.getSuit() == Suit.DIAMONDS)
+									suitableCards.add(x);
+							});
+							break;
+						default:
+							hand.getCards().forEach(x -> {
+								if (x.getSuit() == Suit.HEARTS)
+									suitableCards.add(x);
+							});
+							break;
+
+						}
+
+						// Highest value from the trick hard which is equal to
+						// the suit
+						for (int i = 0; i < trick.getTrickCards().size(); i++) {
+							if (trick.getTrickCards().get(i).getValue() >= drop.getValue()
+									&& drop.getSuit() == trick.getTrickCards().get(i).getSuit()) {
+								drop = trick.getTrickCards().get(i);
+							}
+						}
+
+						if (suitableCards.isEmpty()) {
+							// Provide alternative!
+						}
+
+						else {
+							Collections.sort(suitableCards);
+
+							ArrayList<Card> sizeable = new ArrayList<Card>();
+
+							suitableCards.forEach(x -> {
+								if (x.getValue() < drop.getValue()) {
+									sizeable.add(x);
+								}
+							});
+
+							Collections.sort(sizeable);
+
+							this.getPlayerHand().throwExactCard(sizeable.get(sizeable.size() - 1));
+						}
+
+					}
+
+				}
+
+				else {
+					try {
+						wait();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
 			}
-		}
-
-
-
-			}
-
+			
+			//write collecting results here
 		}
 	}
-
 	
 	@Override
 	public void setPlayerName(String s) {
