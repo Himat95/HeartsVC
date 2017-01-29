@@ -1,10 +1,13 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.*;
 
 public class CardTesting {
 
 	public static void main(String[] args) {
 
-		Deck d = new Deck();
+/*		Deck d = new Deck();
 		Hand h = new Hand();
 		//System.out.println(d.cardsMade());
 
@@ -62,8 +65,23 @@ public class CardTesting {
 		
 		s.iterator().forEachRemaining(x -> System.out.println(x));  
 		
+*/
 
-
+		List<Integer> values = Arrays.asList(1, 2, 5, 4, 3);
+		int[] s = {1, 2, 3, 4, 5}; 
+		
+		for (int e : s) {
+			System.out.println(e);
+		}
+		
+		values.forEach(x -> {
+			Integer c = 3; 
+			if (x > c) {
+				c = x; 
+			}
+			System.out.println(c);
+		});
+		
 	}
 
 }
