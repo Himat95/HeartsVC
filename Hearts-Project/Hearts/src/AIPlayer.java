@@ -8,7 +8,7 @@ import java.util.function.*;
 import java.util.stream.Collector;
 
 
-public class AIPlayer extends Thread implements Player{
+public class AIPlayer extends Thread {
 
 	private String playerName;
 	private int playerScore;
@@ -17,19 +17,22 @@ public class AIPlayer extends Thread implements Player{
 	private ArrayList<Card> trickCardsWon;
 	private ArrayList<Card> suitableCards = new ArrayList<Card>();;
 	private ArrayList<Card> sotm = new ArrayList<>();
-	private boolean startstate = false;
+	private boolean startState = false;
+	private boolean resultState = false;
 	private Trick trick;
 	private Table table;
 	private Card drop;
+
 	public static Comparator<Card> compareByValue = Comparator.comparingInt(Card::getValue);
 
 
-	public AIPlayer(int id) {
-		playerName = "";
+	public AIPlayer(String n, int id, Table table) {
+		playerName = n;
 		playerScore = 0;
 		playerId = id;
 		hand = new Hand();
 		trickCardsWon = new ArrayList<Card>();
+		this.table = table; 
 
 
 		for (int i = 2; i <= 14; i++) {
@@ -40,249 +43,211 @@ public class AIPlayer extends Thread implements Player{
 	}
 
 
+	@Override
 	public void run() {
 
 		while (table.getIsGameFinished() == false) {
-
-			if (table.getTrickNo() == 0) {
-				this.getPlayerHand().getCards().forEach(x -> {
-					if (x.equals(new Card(Suit.CLUBS, 2))) {
-						this.getPlayerHand().throwExactCard(x); 
-						//this.getPlayerHand().throwExactCard(new Card(Suit.CLUBS, 2));
-					}
-					});
-				
-					} 
-			else {
-						try {
-							wait();
-						} catch (Exception e) {
-							System.err.println("Failed to wait (Clubs 2)");
-							e.printStackTrace();
-						}
-					}
-
-
-				
 			
-				if (table.getTurn() == this.playerId) {
+			System.out.println("Phase 1");
+			if (table.getTrickNo() == 1) {
+				this.clubCheck();
+				System.out.println("Phase 2");
+			}
 
+			else {
+				System.out.println("Phase 3");
+				if (table.getTurn() == this.playerId && resultState == false) {
+					System.out.println("Phase 4");
 					if (trick.getTrickCards().isEmpty() == true) {
-						// Write throwing code when its empty, check if heart state is ON! 
-						
-						
-						if (table.getHeartState() == true) { //Can't throw hearts yet!
-							//Card lowest = this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).findAny().get();
-							
-							this.getPlayerHand().getCards().stream()
-							.filter(x -> x.getSuit() != Suit.HEARTS)
-							.forEach(suitableCards::add);
-							
-/*							suitableCards.forEach(x -> {
-								if (x.getValue() <= lowest.getValue()) {
-									lowest = x; 
-								}	
-							});*/
-							
-							this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get());
-							//this.getPlayerHand().throwExactCard(lowest);
-							
-						}
-						
-						
-						else {
-/*							Card lowest = this.getPlayerHand().getCards().stream().findAny().get();
-							
-							this.getPlayerHand().getCards().forEach(x -> {
-								if (x.getValue() <= lowest.getValue()) {
-									lowest = x; 
-								}	
-							});
-							this.getPlayerHand().throwExactCard(lowest);*/
-							this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get());
-							}
-						
-						
-						suitableCards.clear();
-							
-						//this.getPlayerHand().getCards().stream().filter(predicate)
-						//this.getPlayerHand().getCards().stream().collect(minBy(Card::compareTo));
-						//this.getPlayerHand().getCards().stream().filter(x -> x.getValue() > lowest.getValue());
-							}
 
+						if (table.getHeartState() == true) { // Can't throw
+																// hearts yet!
+
+							this.emptyTrickwithHeartState();
+						}
+
+						else {
+							this.emptyTrickwithHeartStateOff();
+						}
+
+					}
 
 					else {
-						drop = trick.getTrickCards().get(0);
-
-						switch (drop.getSuit()) {
-						case SPADES:
-							hand.getCards().forEach(x -> {
-								if (x.getSuit() == Suit.SPADES)
-									suitableCards.add(x);
-							});
-							break;
-
-						case CLUBS:
-							hand.getCards().forEach(x -> {
-								if (x.getSuit() == Suit.CLUBS)
-									suitableCards.add(x);
-							});
-							break;
-						case DIAMONDS:
-							hand.getCards().forEach(x -> {
-								if (x.getSuit() == Suit.DIAMONDS)
-									suitableCards.add(x);
-							});
-							break;
-						default:
-							hand.getCards().forEach(x -> {
-								if (x.getSuit() == Suit.HEARTS)
-									suitableCards.add(x);
-							});
-							break;
-						} //end of cases
-
-
-						// Highest value from the trick hand which is equal to the suit
-						 
-						for (int i = 0; i < trick.getTrickCards().size(); i++) {
-							if (trick.getTrickCards().get(i).getValue() >= drop.getValue()
-									&& drop.getSuit() == trick.getTrickCards().get(i).getSuit()) {
-								drop = trick.getTrickCards().get(i);
-							}
-						}
-
-						if (suitableCards.isEmpty()) {
-							// Provide alternative! throw highest also heartstate doesn't matter
-/*							Card highest = this.getPlayerHand().getCards().stream().findAny().get();
-							
-							
-							this.getPlayerHand().getCards().forEach(x -> {
-								if (x.getValue() >= highest.getValue()) {
-									highest = x; 
-								}	
-							});
-							this.getPlayerHand().throwExactCard(highest);
-							*/
-							this.getPlayerHand().throwExactCard(suitableCards.stream().max(compareByValue).get());
-						}
-
-						else { //There are cards in suitable Cards, we want to throw lower than the drop value
-							Collections.sort(suitableCards);
-
-							ArrayList<Card> lessthandrop = new ArrayList<Card>();
-
-							suitableCards.forEach(x -> {
-								if (x.getValue() < drop.getValue()) {
-									lessthandrop.add(x);
-								}
-							});
-							
-							if (lessthandrop.isEmpty()) { //no card is smaller than the drop value, throw highest in suitableCards
-								this.getPlayerHand().throwExactCard(suitableCards.get(suitableCards.size()-1));
-							}
-							
-							else {
-								Collections.sort(lessthandrop); //throw the biggest in lessthandrop
-								this.getPlayerHand().throwExactCard(lessthandrop.get(lessthandrop.size() - 1));
-							}
-							lessthandrop.clear(); //housekeeping!
-						}
-
-						suitableCards.clear(); //housekeeping!
-					} //else for cases ends
+						this.throwLowestSuitable();
+						System.out.println("Phase 5");
+					} // greedy heuristic
 
 				} // if table turn == this player
+
+				if (resultState == true) {
+					if (playerId == trick.getWinner()) {
+						this.setScore(trick.getScoreCount());
+					}
+				}
 
 				else { // wait for your turn silly AI
 					try {
 						wait();
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+						System.out.println("Wait error, was interrupted.");
 						e.printStackTrace();
 					}
 				}
-				
-				//write collecting results here
-				
 
-			}//Game is finished after this
+			}
+		} // Game is finished after this
 
 		System.out.println(this.playerId + "has finished");
 		System.out.println(this.getTrickCardsWon());
 		System.out.println(this.getPlayerHand());
 		System.out.println(this.getScore());
 	}
-		
+	
+	
+	private synchronized void throwLowestSuitable() {
+		drop = trick.getTrickCards().stream()
+				.filter(x -> trick.getTrickCards().get(0).getSuit() == x.getSuit())
+				.max(compareByValue).get();
+
+		this.getPlayerHand().getCards().stream()
+		.filter(x -> x.getSuit() == drop.getSuit()).forEach(suitableCards::add);
 
 
+		if (suitableCards.isEmpty()) {
+			this.getPlayerHand().throwExactCard(this.getPlayerHand().getCards().stream().max(compareByValue).get());
+		}
 
-	@Override
-	public void setPlayerName(String s) {
-		playerName = s;
+		else { // There are cards in suitable Cards, we want to
+				// throw lower than the drop value
+			Collections.sort(suitableCards);
+
+			ArrayList<Card> lessthandrop = new ArrayList<Card>();
+
+			//suitableCards.stream().filter(x -> x.getValue() < drop.getValue()).map(lessthandrop::add); 
+			suitableCards.forEach(x -> {
+				if (x.getValue() < drop.getValue()) {
+					lessthandrop.add(x);
+				}
+			});
+
+			if (lessthandrop.isEmpty()) { // no card is smaller than the drop value, throw highest in suitableCards
+	
+				this.getPlayerHand().throwExactCard(suitableCards.get(suitableCards.size() - 1));
+			}
+
+			else {
+				Collections.sort(lessthandrop); // throw the biggest in lessthandrop
+												
+				this.getPlayerHand().throwExactCard(lessthandrop.get(lessthandrop.size() - 1));
+			}
+			lessthandrop.clear(); // housekeeping!
+		}
+		suitableCards.clear(); // housekeeping!
 	}
 
-	@Override
+
+	private synchronized void emptyTrickwithHeartStateOff() {
+		this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get());
+		
+		suitableCards.clear();
+		
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			System.out.println("Error while throwing for an empty trick with HeartState Off");
+			e.printStackTrace();
+		}
+	}
+	
+	
+	private synchronized void emptyTrickwithHeartState() {
+		this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS)
+		.forEach(suitableCards::add);
+
+		this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get());
+		
+		suitableCards.clear();
+		
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			System.out.println("Error while throwing for an empty trick with HeartState On");
+			e.printStackTrace();
+		}
+	}
+
+	private synchronized void clubCheck() {
+		this.getPlayerHand().getCards().forEach(x -> {
+			if (x.equals(new Card(Suit.CLUBS, 2))) {
+				this.getPlayerHand().throwExactCard(x);
+				}
+			else {
+				try {
+					wait();
+				} catch (InterruptedException e) {
+					System.out.println("Error while checking for Clubs");
+					e.printStackTrace();
+				} 
+			}
+			});
+	}
+	
+	
+
 	public String getPlayerName() {
 		return playerName;
 	}
 
-	@Override
+
 	public void setScore(int i) {
 		playerScore += i;
 	}
 
-	@Override
+
 	public int getScore() {
 		return playerScore;
 	}
 
-	@Override
+
 	public void incScore() {
 		playerScore++;
 	}
 
-	@Override
+
 	public void decScore() {
 		playerScore--;
 	}
 
-	@Override
 	public void resetScore() {
 		playerScore = 0;
 	}
 
-	@Override
-	public void setPlayerId(int i) {
-		playerId = i;
-	}
 
-	@Override
 	public int getPlayerId() {
 		return playerId;
 	}
 
-	@Override
+
 	public Hand getPlayerHand() {
 		return hand;
 	}
 
-	@Override
+
 	public String toString() {
 		return "Player ID: " + playerId + " \t " + "Player: " + playerName + "\t Player Score: " + playerScore;
 	}
 
-	@Override
+
 	public ArrayList<Card> getTrickCardsWon() {
 		return trickCardsWon;
 	}
 
-	@Override
+
 	public void addToTrickCardsWon(ArrayList<Card> tc) {
 		trickCardsWon.addAll(tc);
 	}
 
-	@Override
+
 	public boolean ShotOverTheMoon() {
 		return trickCardsWon.containsAll(sotm);
 	}
@@ -291,7 +256,7 @@ public class AIPlayer extends Thread implements Player{
 		return sotm;
 	}
 
-	@Override
+
 	public void sortTrickCardsWon() {
 		Collections.sort(trickCardsWon);
 	}

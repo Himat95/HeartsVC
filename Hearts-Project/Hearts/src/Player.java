@@ -10,7 +10,7 @@ public interface Player {
 	void incScore();
 	void decScore();
 	void resetScore();
-
+	
 	void setPlayerId(int i);
 	int getPlayerId();
 	Hand getPlayerHand();
@@ -19,4 +19,5 @@ public interface Player {
 	boolean ShotOverTheMoon();
 	void sortTrickCardsWon();
 	ArrayList<Card> getsotm();
+	void start(); 
 }

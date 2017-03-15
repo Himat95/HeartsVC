@@ -1,5 +1,5 @@
 
-public class Table {
+public class Table extends Thread {
 	
 	private int round;
 	private int trickNo;
@@ -8,12 +8,31 @@ public class Table {
 	private Trick trick; 
 	private boolean gameFinished; 
 	
+	
 	public Table() {
 		round = 0; 
 		trickNo = 0; 
 		heartStateOn = true;
 		gameFinished = false; 
 	}
+	
+	
+	@Override
+	public void run() {
+		/*
+		 * Check for players (4) 
+		 * shuffle and deal cards to each player
+		 * increment trickno, and create a new trick
+		 * notify all players to search for clubs (start game)
+		 * increment turn variabe and notify that player
+		 * check if trick is full, 
+		 * calculate winner and return the score
+		 * new trick and increment trickno, check heart state
+		 * notify winning players to start next turn. 
+		 */
+	}
+	
+	
 	
 	public int getRound() {
 		return round; 

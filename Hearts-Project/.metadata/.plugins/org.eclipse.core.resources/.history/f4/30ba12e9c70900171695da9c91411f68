@@ -1,0 +1,12 @@
+
+public class ConcurrentGame {
+
+	public static void main(String[] args) {
+	
+		Player p = new AIPlayer(0); 
+		
+		
+		p.start();
+	}
+
+}
