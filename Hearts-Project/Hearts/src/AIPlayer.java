@@ -46,24 +46,26 @@ public class AIPlayer extends Thread {
 	@Override
 	public void run() {
 
+
+		System.out.println("Player" + this.getPlayerId() + ": " + this.getPlayerHand().getCards());
 		while (table.getIsGameFinished() == false) {
 			
-			System.out.println("Phase 1");
+			System.out.println(this.playerId + ": Phase 1");
 			if (table.getTrickNo() == 1) {
 				this.clubCheck();
-				System.out.println("Phase 2");
+				System.out.println(this.playerId + ": Phase 2");
 			}
 
 			else {
-				System.out.println("Phase 3");
+				System.out.println(this.playerId + ": Phase 3");
 				if (table.getTurn() == this.playerId && resultState == false) {
-					System.out.println("Phase 4");
+					System.out.println(this.playerId + ": Phase 4");
 					if (trick.getTrickCards().isEmpty() == true) {
 
 						if (table.getHeartState() == true) { // Can't throw
 																// hearts yet!
 
-							this.emptyTrickwithHeartState();
+							this.emptyTrickwithHeartStateOn();
 						}
 
 						else {
@@ -74,13 +76,14 @@ public class AIPlayer extends Thread {
 
 					else {
 						this.throwLowestSuitable();
-						System.out.println("Phase 5");
+						System.out.println(this.playerId + " Phase 5");
 					} // greedy heuristic
 
 				} // if table turn == this player
 
 				if (resultState == true) {
-					if (playerId == trick.getWinner()) {
+					System.out.println(this.playerId + ": Phase 6");
+					if (this == trick.getWinner()) {
 						this.setScore(trick.getScoreCount());
 					}
 				}
@@ -115,6 +118,7 @@ public class AIPlayer extends Thread {
 
 		if (suitableCards.isEmpty()) {
 			this.getPlayerHand().throwExactCard(this.getPlayerHand().getCards().stream().max(compareByValue).get());
+			
 		}
 
 		else { // There are cards in suitable Cards, we want to
@@ -143,6 +147,13 @@ public class AIPlayer extends Thread {
 			lessthandrop.clear(); // housekeeping!
 		}
 		suitableCards.clear(); // housekeeping!
+		
+		try {
+			wait();
+		} catch (InterruptedException e) {
+			System.out.println("Error while throwing for an empty trick with HeartState Off");
+			e.printStackTrace();
+		}
 	}
 
 
@@ -160,7 +171,7 @@ public class AIPlayer extends Thread {
 	}
 	
 	
-	private synchronized void emptyTrickwithHeartState() {
+	private synchronized void emptyTrickwithHeartStateOn() {
 		this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS)
 		.forEach(suitableCards::add);
 

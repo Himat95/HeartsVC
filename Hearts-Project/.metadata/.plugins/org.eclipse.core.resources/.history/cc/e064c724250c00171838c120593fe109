@@ -1,0 +1,18 @@
+import java.util.concurrent.ArrayBlockingQueue;
+
+public class ConcurrentGame {
+
+	public static void main(String[] args) {
+	
+		ArrayBlockingQueue<AIPlayer> queue = new ArrayBlockingQueue<AIPlayer>(4); 
+		
+		Table t = new Table(queue); 
+		AIPlayer p = new AIPlayer("Himat", 0, t); 
+		AIPlayer p2 = new AIPlayer("Himat", 1, t); 
+		AIPlayer p3 = new AIPlayer("Himat", 2, t); 
+		p.start();
+		p2.start();
+		p3.start();
+	}
+
+}

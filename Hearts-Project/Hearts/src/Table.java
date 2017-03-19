@@ -1,3 +1,4 @@
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class Table extends Thread {
 	
@@ -7,13 +8,15 @@ public class Table extends Thread {
 	private boolean heartStateOn;
 	private Trick trick; 
 	private boolean gameFinished; 
+	private ArrayBlockingQueue<AIPlayer> queue; 
 	
 	
-	public Table() {
+	public Table(ArrayBlockingQueue<AIPlayer> queue2) {
 		round = 0; 
 		trickNo = 0; 
 		heartStateOn = true;
 		gameFinished = false; 
+		this.queue = queue2; 
 	}
 	
 	
@@ -30,6 +33,56 @@ public class Table extends Thread {
 		 * new trick and increment trickno, check heart state
 		 * notify winning players to start next turn. 
 		 */
+	
+		Deck d = new Deck(); 
+		d.shuffle();
+		
+		queue.forEach(x -> x.getPlayerHand().addCards(d.dealCards()));
+		System.out.println("Dealing Cards");
+		
+		Trick t = this.newTrick(); 
+		this.incTrickNo(); this.incRound(); 
+		
+		this.notifyAll();
+		
+		queue.forEach(x -> {
+			if (x.getPlayerHand().lastThrownCard().equals(new Card(Suit.CLUBS, 2))) {
+				t.addtoTrick(x.getPlayerHand().lastThrownCard());
+				this.setTurn(x);
+				this.incTurn();
+			}
+		});
+		
+		while(this.trickNo != 13) {
+			
+		while(!t.isTrickFull()) {
+			queue.forEach(x -> {
+				if (x.getPlayerId() == this.getTurn()) {
+					x.notify();
+				}
+			});
+/*			queue.forEach(x -> {
+				if (t.getWinner() == x) {
+					t.addtoTrick(x.getPlayerHand().lastThrownCard());
+				}
+			});
+			this.incTurn();
+		}
+		*/
+		t.calculateScore();
+
+		queue.forEach(x -> {
+			if (x.getPlayerHand().lastThrownCard() == t.calculateWinner()) {
+				t.setWinner(x);
+				x.setScore(t.getScoreCount());
+				x.addToTrickCardsWon(t.getTrickCards());
+				this.setTurn(x);
+			}
+		});
+		
+		t.clearTrick();
+		this.incTrickNo();
+		}
 	}
 	
 	
@@ -63,8 +116,8 @@ public class Table extends Thread {
 		round = 0; 
 	}
 	
-	public void setTurn(Player p) {
-		turn = p.getPlayerId(); 
+	public void setTurn(AIPlayer x) {
+		turn = x.getPlayerId(); 
 	}
 	
 	public int getTurn() {

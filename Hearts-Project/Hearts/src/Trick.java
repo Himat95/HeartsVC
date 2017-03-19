@@ -3,7 +3,7 @@ import java.util.Collections;
 
 public class Trick {
 	
-	private Player winner;
+	private AIPlayer winner;
 	private ArrayList<Card> trickCards;
 	private Card queenSpade;
 	private ArrayList<Card> heartCards; 
@@ -21,13 +21,17 @@ public class Trick {
 	}
 	
 	
-	public void setWinner(Player p) {
-		winner = p;
+	public boolean isTrickFull() {
+		return trickCards.size() == 4;
 	}
 	
-	public int getWinner() {
-		int n = winner.getPlayerId(); 
-		return n; 
+	public void setWinner(AIPlayer x) {
+		winner = x;
+	}
+	
+	public AIPlayer getWinner() {
+		//int n = winner.getPlayerId(); 
+		return winner; 
 	}
 	
 	public void sortTrick() {
