@@ -17,8 +17,7 @@ public class AIPlayer extends Thread {
 	private ArrayList<Card> trickCardsWon;
 	private ArrayList<Card> suitableCards = new ArrayList<Card>();;
 	private ArrayList<Card> sotm = new ArrayList<>();
-	private boolean startState = false;
-	private boolean resultState = false;
+	private boolean isReady; 
 	private Trick trick;
 	private Table table;
 	private Card drop;
@@ -33,6 +32,7 @@ public class AIPlayer extends Thread {
 		hand = new Hand();
 		trickCardsWon = new ArrayList<Card>();
 		this.table = table; 
+		isReady = false; 
 
 
 		for (int i = 2; i <= 14; i++) {
@@ -46,19 +46,39 @@ public class AIPlayer extends Thread {
 	@Override
 	public void run() {
 
+/*		try {
+			table.getPlayerQueue().put(this);
+			notifyAll();
+		} catch (InterruptedException e1) {
+			System.err.println("Failed to put myself in queue " + this.playerId);
+			e1.printStackTrace();
+		}*/
 
-		System.out.println("Player" + this.getPlayerId() + ": " + this.getPlayerHand().getCards());
+		while(this.getPlayerHand().getCards().isEmpty()) {
+		try {
+			wait();
+		} catch (InterruptedException e1) {
+			System.err.println("I dont wait for no table...");
+			e1.printStackTrace();
+			}
+		}
+		
+		System.out.println("Player " + this.getPlayerId() + ": " + this.getPlayerHand().getCards());
+		
+		this.clubCheck(); 
+		
 		while (table.getIsGameFinished() == false) {
-			
-			System.out.println(this.playerId + ": Phase 1");
+/*			
+			//System.out.println(this.playerId + ": Phase 1");
 			if (table.getTrickNo() == 1) {
 				this.clubCheck();
-				System.out.println(this.playerId + ": Phase 2");
+				//System.out.println(this.playerId + ": Phase 2");
 			}
 
 			else {
+*/
 				System.out.println(this.playerId + ": Phase 3");
-				if (table.getTurn() == this.playerId && resultState == false) {
+				if (table.getTurn() == this.playerId && table.isPlay() == true) {
 					System.out.println(this.playerId + ": Phase 4");
 					if (trick.getTrickCards().isEmpty() == true) {
 
@@ -81,29 +101,32 @@ public class AIPlayer extends Thread {
 
 				} // if table turn == this player
 
-				if (resultState == true) {
+				
+/*				if (table.isResults() == true) {
 					System.out.println(this.playerId + ": Phase 6");
 					if (this == trick.getWinner()) {
 						this.setScore(trick.getScoreCount());
 					}
 				}
-
+*/
 				else { // wait for your turn silly AI
+					this.setReady(false);
 					try {
 						wait();
 					} catch (InterruptedException e) {
-						System.out.println("Wait error, was interrupted.");
+						System.err.println("Wait error, was interrupted.");
 						e.printStackTrace();
 					}
 				}
+				this.setReady(false);
 
-			}
+//			}
+			
 		} // Game is finished after this
 
-		System.out.println(this.playerId + "has finished");
-		System.out.println(this.getTrickCardsWon());
-		System.out.println(this.getPlayerHand());
-		System.out.println(this.getScore());
+		System.out.println("Player " + this.playerId + ": has finished with the score of " + this.getScore());
+		System.out.println(this.getTrickCardsWon() + " + ");
+		System.out.print(this.getPlayerHand());
 	}
 	
 	
@@ -118,7 +141,7 @@ public class AIPlayer extends Thread {
 
 		if (suitableCards.isEmpty()) {
 			this.getPlayerHand().throwExactCard(this.getPlayerHand().getCards().stream().max(compareByValue).get());
-			
+			this.setReady(true);
 		}
 
 		else { // There are cards in suitable Cards, we want to
@@ -137,23 +160,20 @@ public class AIPlayer extends Thread {
 			if (lessthandrop.isEmpty()) { // no card is smaller than the drop value, throw highest in suitableCards
 	
 				this.getPlayerHand().throwExactCard(suitableCards.get(suitableCards.size() - 1));
+				this.setReady(true);
 			}
 
 			else {
 				Collections.sort(lessthandrop); // throw the biggest in lessthandrop
 												
 				this.getPlayerHand().throwExactCard(lessthandrop.get(lessthandrop.size() - 1));
+				this.setReady(true);
 			}
 			lessthandrop.clear(); // housekeeping!
 		}
-		suitableCards.clear(); // housekeeping!
 		
-		try {
-			wait();
-		} catch (InterruptedException e) {
-			System.out.println("Error while throwing for an empty trick with HeartState Off");
-			e.printStackTrace();
-		}
+		suitableCards.clear(); // housekeeping!
+
 	}
 
 
@@ -161,13 +181,7 @@ public class AIPlayer extends Thread {
 		this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get());
 		
 		suitableCards.clear();
-		
-		try {
-			wait();
-		} catch (InterruptedException e) {
-			System.out.println("Error while throwing for an empty trick with HeartState Off");
-			e.printStackTrace();
-		}
+
 	}
 	
 	
@@ -179,12 +193,7 @@ public class AIPlayer extends Thread {
 		
 		suitableCards.clear();
 		
-		try {
-			wait();
-		} catch (InterruptedException e) {
-			System.out.println("Error while throwing for an empty trick with HeartState On");
-			e.printStackTrace();
-		}
+
 	}
 
 	private synchronized void clubCheck() {
@@ -192,14 +201,6 @@ public class AIPlayer extends Thread {
 			if (x.equals(new Card(Suit.CLUBS, 2))) {
 				this.getPlayerHand().throwExactCard(x);
 				}
-			else {
-				try {
-					wait();
-				} catch (InterruptedException e) {
-					System.out.println("Error while checking for Clubs");
-					e.printStackTrace();
-				} 
-			}
 			});
 	}
 	
@@ -270,6 +271,16 @@ public class AIPlayer extends Thread {
 
 	public void sortTrickCardsWon() {
 		Collections.sort(trickCardsWon);
+	}
+
+
+	public boolean isReady() {
+		return isReady;
+	}
+
+
+	public void setReady(boolean isReady) {
+		this.isReady = isReady;
 	}
 
 

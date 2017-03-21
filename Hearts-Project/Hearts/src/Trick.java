@@ -72,7 +72,7 @@ public class Trick {
 		
 		Collections.sort(winningCards);
 		
-		return winningCards.get(0); 
+		return winningCards.get(winningCards.size()-1); 
 	}
 	
 	public int getScoreCount() {

@@ -9,6 +9,8 @@ public class Table extends Thread {
 	private Trick trick; 
 	private boolean gameFinished; 
 	private ArrayBlockingQueue<AIPlayer> queue; 
+	private boolean play;
+	private boolean results;
 	
 	
 	public Table(ArrayBlockingQueue<AIPlayer> queue2) {
@@ -16,6 +18,8 @@ public class Table extends Thread {
 		trickNo = 0; 
 		heartStateOn = true;
 		gameFinished = false; 
+		play = false;
+		results = false; 
 		this.queue = queue2; 
 	}
 	
@@ -36,40 +40,70 @@ public class Table extends Thread {
 	
 		Deck d = new Deck(); 
 		d.shuffle();
-		
-		queue.forEach(x -> x.getPlayerHand().addCards(d.dealCards()));
-		System.out.println("Dealing Cards");
-		
 		Trick t = this.newTrick(); 
 		this.incTrickNo(); this.incRound(); 
 		
-		this.notifyAll();
+/*		while(queue.size() != 4) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				System.err.println("failed waiting for players to join");
+				e.printStackTrace();
+			} 
+		}
+//		queue.forEach(x -> x.start());
+*/		
+		queue.forEach(x -> x.getPlayerHand().addCards(d.dealCards()));
+		System.out.println("Dealing Cards");
+		
+//		notifyAll(); 
 		
 		queue.forEach(x -> {
 			if (x.getPlayerHand().lastThrownCard().equals(new Card(Suit.CLUBS, 2))) {
 				t.addtoTrick(x.getPlayerHand().lastThrownCard());
 				this.setTurn(x);
-				this.incTurn();
 			}
 		});
 		
-		while(this.trickNo != 13) {
+		this.incTurn();
+
+		
+		while(this.getTrickNo() != 2) {
 			
 		while(!t.isTrickFull()) {
+			this.setPlay(true);
+			
 			queue.forEach(x -> {
 				if (x.getPlayerId() == this.getTurn()) {
 					x.notify();
-				}
-			});
-/*			queue.forEach(x -> {
-				if (t.getWinner() == x) {
+					
+					while(!x.isReady()) {
+						try {
+							this.wait();
+						} catch (InterruptedException e) {
+							System.err.println("Table died! Nooo");
+							e.printStackTrace();
+						} 
+					}
+					
 					t.addtoTrick(x.getPlayerHand().lastThrownCard());
 				}
 			});
+			
 			this.incTurn();
+			
 		}
-		*/
+		
+		this.setPlay(false);
+		
+		
+		/* ----------------------------------Split Section------------------------------- */
+		
+		
 		t.calculateScore();
+
+		
+		this.setResults(true);
 
 		queue.forEach(x -> {
 			if (x.getPlayerHand().lastThrownCard() == t.calculateWinner()) {
@@ -78,14 +112,23 @@ public class Table extends Thread {
 				x.addToTrickCardsWon(t.getTrickCards());
 				this.setTurn(x);
 			}
-		});
+		}); //IM MODIFYING STATE! Let player add his own score! 
+		
+		this.setResults(false);
 		
 		t.clearTrick();
 		this.incTrickNo();
 		}
+		
+		this.setIsGameFinished(true);
+		System.out.println("Table turning lifeless...");
+		
 	}
 	
 	
+	public ArrayBlockingQueue<AIPlayer> getPlayerQueue() {
+		return queue;
+	}
 	
 	public int getRound() {
 		return round; 
@@ -142,6 +185,26 @@ public class Table extends Thread {
 	
 	public boolean getIsGameFinished() {
 		return gameFinished; 
+	}
+
+
+	public boolean isPlay() {
+		return play;
+	}
+
+
+	public void setPlay(boolean play) {
+		this.play = play;
+	}
+
+
+	public boolean isResults() {
+		return results;
+	}
+
+
+	public void setResults(boolean results) {
+		this.results = results;
 	}
 	
 }

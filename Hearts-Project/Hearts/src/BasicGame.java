@@ -4,6 +4,7 @@ public class BasicGame {
 
 	public static void main(String[] args) {
 
+/*
 		Deck deck = new Deck();  	//Create a deck of 52 cards
 		Table table = new Table(); 	//Create a table for the players to play on
 		ArrayList<Player> players = new ArrayList<>();
@@ -99,5 +100,8 @@ public class BasicGame {
 		players.forEach(x -> System.out.println("Current Cards: " + x.getPlayerHand().getCards() + "\n \n"));
 		players.forEach(x -> System.out.println(x.toString() + "\n"));
 		players.forEach(x -> System.out.println("\n Held Trick Cards: " + x.getTrickCardsWon() + "\n"));
+		
+		*/
 	}
+	
 }
