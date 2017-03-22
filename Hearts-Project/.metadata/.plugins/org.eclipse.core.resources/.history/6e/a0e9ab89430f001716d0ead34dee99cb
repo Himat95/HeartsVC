@@ -68,9 +68,8 @@ public class Table extends Thread {
 		}
 		
 		queue.forEach(x -> {
-			Card c = x.getThrownCard().takeMVar();
-			if (c.equals(new Card(Suit.CLUBS, 2))) {
-				trick.addtoTrick(c);
+			if (x.getPlayerHand().lastThrownCard().equals(new Card(Suit.CLUBS, 2))) {
+				trick.addtoTrick(x.getThrownCard().takeMVar());
 				this.setTurn(x);
 			}
 		});

@@ -60,17 +60,9 @@ public class Table extends Thread {
 		
 //		notifyAll(); 
 		
-		try {
-			this.sleep(2000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
 		queue.forEach(x -> {
-			Card c = x.getThrownCard().takeMVar();
-			if (c.equals(new Card(Suit.CLUBS, 2))) {
-				trick.addtoTrick(c);
+			if (x.getPlayerHand().lastThrownCard().equals(new Card(Suit.CLUBS, 2))) {
+				trick.addtoTrick(x.getThrownCard().takeMVar());
 				this.setTurn(x);
 			}
 		});
@@ -116,7 +108,7 @@ public class Table extends Thread {
 		this.setResults(true);
 
 		queue.forEach(x -> {
-			if (x.getPlayerHand().lastThrownCard() == trick.calculateWinner()) {
+			if (x.getPlayerHand().lastThrownCard() == t.calculateWinner()) {
 				trick.setWinner(x);
 				//x.setScore(t.getScoreCount());
 				x.getResult().putMVar(trick.getScoreCount());

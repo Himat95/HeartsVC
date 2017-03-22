@@ -6,17 +6,15 @@ public class ConcurrentGame {
 	
 		ArrayBlockingQueue<AIPlayer> queue = new ArrayBlockingQueue<AIPlayer>(4); 
 		
-		Trick trick = new Trick(); 
-		
-		Table table = new Table(queue, trick); 
-		AIPlayer p = new AIPlayer("Himat", 0, table, trick); 
-		AIPlayer p2 = new AIPlayer("Raj", 1, table, trick); 
-		AIPlayer p3 = new AIPlayer("Sunny", 2, table, trick); 
-		AIPlayer p4 = new AIPlayer("Faker", 3, table, trick); 
+		Table t = new Table(queue); 
+		AIPlayer p = new AIPlayer("Himat", 0, t); 
+		AIPlayer p2 = new AIPlayer("Raj", 1, t); 
+		AIPlayer p3 = new AIPlayer("Sunny", 2, t); 
+		AIPlayer p4 = new AIPlayer("Faker", 3, t); 
 		
 		queue.add(p); queue.add(p2); queue.add(p3); queue.add(p4);
 		
-		table.start();
+		t.start();
 		
 		p.start();
 		p2.start();

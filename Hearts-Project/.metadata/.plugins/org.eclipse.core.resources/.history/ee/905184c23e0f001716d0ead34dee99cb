@@ -11,10 +11,9 @@ public class Table extends Thread {
 	private ArrayBlockingQueue<AIPlayer> queue; 
 	private boolean play;
 	private boolean results;
-
 	
 	
-	public Table(ArrayBlockingQueue<AIPlayer> queue2, Trick trick) {
+	public Table(ArrayBlockingQueue<AIPlayer> queue2) {
 		round = 0; 
 		trickNo = 0; 
 		heartStateOn = true;
@@ -22,7 +21,6 @@ public class Table extends Thread {
 		play = false;
 		results = false; 
 		this.queue = queue2; 
-		this.trick = trick; 
 	}
 	
 	
@@ -42,7 +40,7 @@ public class Table extends Thread {
 	
 		Deck d = new Deck(); 
 		d.shuffle();
-//		Trick t = this.newTrick(); 
+		Trick t = this.newTrick(); 
 		this.incTrickNo(); this.incRound(); 
 		
 /*		while(queue.size() != 4) {
@@ -60,17 +58,9 @@ public class Table extends Thread {
 		
 //		notifyAll(); 
 		
-		try {
-			this.sleep(2000);
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
 		queue.forEach(x -> {
-			Card c = x.getThrownCard().takeMVar();
-			if (c.equals(new Card(Suit.CLUBS, 2))) {
-				trick.addtoTrick(c);
+			if (x.getPlayerHand().lastThrownCard().equals(new Card(Suit.CLUBS, 2))) {
+				t.addtoTrick(x.getPlayerHand().lastThrownCard());
 				this.setTurn(x);
 			}
 		});
@@ -80,7 +70,7 @@ public class Table extends Thread {
 		
 		while(this.getTrickNo() != 2) {
 			
-		while(!trick.isTrickFull()) {
+		while(!t.isTrickFull()) {
 			this.setPlay(true);
 			
 			queue.forEach(x -> {
@@ -96,7 +86,7 @@ public class Table extends Thread {
 						} 
 					}
 					
-					trick.addtoTrick(x.getThrownCard().takeMVar());
+					t.addtoTrick(x.getPlayerHand().lastThrownCard());
 				}
 			});
 			
@@ -110,24 +100,23 @@ public class Table extends Thread {
 		/* ----------------------------------Split Section------------------------------- */
 		
 		
-		trick.calculateScore();
+		t.calculateScore();
 
 		
 		this.setResults(true);
 
 		queue.forEach(x -> {
-			if (x.getPlayerHand().lastThrownCard() == trick.calculateWinner()) {
-				trick.setWinner(x);
-				//x.setScore(t.getScoreCount());
-				x.getResult().putMVar(trick.getScoreCount());
-				x.addToTrickCardsWon(trick.getTrickCards());
+			if (x.getPlayerHand().lastThrownCard() == t.calculateWinner()) {
+				t.setWinner(x);
+				x.setScore(t.getScoreCount());
+				x.addToTrickCardsWon(t.getTrickCards());
 				this.setTurn(x);
 			}
 		}); //IM MODIFYING STATE! Let player add his own score! 
 		
 		this.setResults(false);
 		
-		trick.clearTrick();
+		t.clearTrick();
 		this.incTrickNo();
 		}
 		
@@ -136,10 +125,6 @@ public class Table extends Thread {
 		
 	}
 	
-	
-	public Trick getTrick() {
-		return trick; 
-	}
 	
 	public ArrayBlockingQueue<AIPlayer> getPlayerQueue() {
 		return queue;
@@ -151,6 +136,11 @@ public class Table extends Thread {
 	
 	public void incRound() {
 		round++; 
+	}
+	
+	public Trick newTrick() {
+		trick = new Trick(); 
+		return trick; 
 	}
 	
 	public void incTrickNo() {

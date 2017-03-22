@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.concurrent.*;
 import java.util.stream.*;
 import java.util.function.*;
@@ -28,7 +27,7 @@ public class AIPlayer extends Thread {
 	public static Comparator<Card> compareByValue = Comparator.comparingInt(Card::getValue);
 
 
-	public AIPlayer(String n, int id, Table table, Trick trick) {
+	public AIPlayer(String n, int id, Table table) {
 		playerName = n;
 		playerScore = 0;
 		playerId = id;
@@ -38,7 +37,6 @@ public class AIPlayer extends Thread {
 		isReady = false; 
 		throwingCard = new MVar<Card>(); 
 		result = new MVar<Integer>(); 
-		this.trick = trick;
 
 
 		for (int i = 2; i <= 14; i++) {
@@ -69,12 +67,6 @@ public class AIPlayer extends Thread {
 			}
 		}*/
 		
-		try {
-			this.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		System.out.println("Player " + this.getPlayerId() + ": " + this.getPlayerHand().getCards());
 		
 		this.clubCheck(); 
@@ -89,9 +81,9 @@ public class AIPlayer extends Thread {
 
 			else {
 */
-				//System.out.println(this.playerId + ": Phase 3");
+				System.out.println(this.playerId + ": Phase 3");
 				if (table.getTurn() == this.playerId && table.isPlay() == true) {
-					//System.out.println(this.playerId + ": Phase 4");
+					System.out.println(this.playerId + ": Phase 4");
 					if (trick.getTrickCards().isEmpty() == true) {
 
 						if (table.getHeartState() == true) { // Can't throw
@@ -108,14 +100,14 @@ public class AIPlayer extends Thread {
 
 					else {
 						this.throwLowestSuitable();
-						//System.out.println(this.playerId + " Phase 5");
+						System.out.println(this.playerId + " Phase 5");
 					} // greedy heuristic
 
 				} // if table turn == this player
 
 				
 				if (table.isResults() == true) {
-					//System.out.println(this.playerId + ": Phase 6");
+					System.out.println(this.playerId + ": Phase 6");
 					//if (this == trick.getWinner()) {
 						this.setScore(this.getResult().takeMVar());
 					//}
@@ -200,22 +192,11 @@ public class AIPlayer extends Thread {
 	}
 
 	private synchronized void clubCheck() {
-		
-		Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
-		
-		while(iter.hasNext()) {
-			
-			Card c = iter.next();
-			if (c == new Card(Suit.CLUBS, 2)) {
-				iter.remove();
-				this.getThrownCard().putMVar(c);
-			}
-		}
-/*		this.getPlayerHand().getCards().forEach(x -> {
+		this.getPlayerHand().getCards().forEach(x -> {
 			if (x.equals(new Card(Suit.CLUBS, 2))) {
 				this.getThrownCard().putMVar(this.getPlayerHand().throwExactCard(x));
 				}
-			});*/
+			});
 	}
 	
 	
