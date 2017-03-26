@@ -3,19 +3,19 @@ import java.util.Collections;
 
 public class Trick {
 
-	private AIPlayer winner;
+	private Player winner;
 	private ArrayList<Card> trickCards;
 	private Card queenSpade;
 	private ArrayList<Card> heartCards;
 	private int scoreCount;
-	private ArrayList<Pair<Card, AIPlayer>> playerlist;
+	private ArrayList<Pair<Card, Player>> playerlist;
 
 
 	public Trick() {
 		trickCards = new ArrayList<Card>();
 		queenSpade = new Card(Suit.SPADES, 12);
 		heartCards = new ArrayList<Card>();
-		playerlist = new ArrayList<Pair<Card, AIPlayer>>();
+		playerlist = new ArrayList<Pair<Card, Player>>();
 		scoreCount = 0;
 
 		for (int i = 2; i < 15; i++) {
@@ -28,11 +28,11 @@ public class Trick {
 		return trickCards.size() == 4;
 	}
 
-	public void setWinner(AIPlayer x) {
-		winner = x;
+	public void setWinner(Player player) {
+		winner = player;
 	}
 
-	public AIPlayer getWinner() {
+	public Player getWinner() {
 		//int n = winner.getPlayerId();
 		return winner;
 	}
@@ -45,9 +45,9 @@ public class Trick {
 		return trickCards;
 	}
 
-	public void addtoTrick(Card c, AIPlayer x) {
+	public void addtoTrick(Card c, Player x) {
 		trickCards.add(c);
-		playerlist.add(new Pair<Card, AIPlayer>(c, x));
+		playerlist.add(new Pair<Card, Player>(c, x));
 	}
 
 	public void calculateScore() {

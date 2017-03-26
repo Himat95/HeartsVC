@@ -8,13 +8,13 @@ public class Table extends Thread {
 	private boolean heartStateOn;
 	private Trick trick;
 	private boolean gameFinished;
-	private ArrayBlockingQueue<AIPlayer> queue;
+	private ArrayBlockingQueue<Player> queue;
 	private boolean play;
 	private boolean results;
 
 
 
-	public Table(ArrayBlockingQueue<AIPlayer> queue2, Trick trick) {
+	public Table(ArrayBlockingQueue<Player> queue2, Trick trick) {
 		round = 0;
 		trickNo = 0;
 		heartStateOn = true;
@@ -163,7 +163,7 @@ public class Table extends Thread {
 		return trick;
 	}
 
-	public ArrayBlockingQueue<AIPlayer> getPlayerQueue() {
+	public ArrayBlockingQueue<Player> getPlayerQueue() {
 		return queue;
 	}
 
@@ -191,7 +191,7 @@ public class Table extends Thread {
 		round = 0;
 	}
 
-	public void setTurn(AIPlayer x) {
+	public void setTurn(Player x) {
 		turn = x.getPlayerId();
 	}
 

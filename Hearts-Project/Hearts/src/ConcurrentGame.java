@@ -4,7 +4,7 @@ public class ConcurrentGame {
 
 	public static void main(String[] args) {
 
-		ArrayBlockingQueue<AIPlayer> queue = new ArrayBlockingQueue<AIPlayer>(4);
+		ArrayBlockingQueue<Player> queue = new ArrayBlockingQueue<Player>(4);
 
 		Trick trick = new Trick();
 

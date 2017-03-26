@@ -1,0 +1,82 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+
+public class HumanPlayer extends Thread implements Player {
+
+	private String playerName;
+	private int playerScore;
+	private int playerId;
+	private Hand hand;
+	private ArrayList<Card> trickCardsWon;
+	private ArrayList<Card> suitableCards = new ArrayList<Card>();;
+	private ArrayList<Card> sotm = new ArrayList<>();
+	private boolean isReady;
+	private Trick trick;
+	private Table table;
+	private Card drop;
+	private Card thrownCard; 
+
+	public static Comparator<Card> compareByValue = Comparator.comparingInt(Card::getValue);
+
+
+
+	public HumanPlayer(String n, int id, Table table, Trick trick) {
+		playerName = n;
+		playerScore = 0;
+		playerId = id;
+		hand = new Hand();
+		trickCardsWon = new ArrayList<Card>();
+		this.table = table;
+		this.trick = trick;
+
+
+		for (int i = 2; i <= 14; i++) {
+			sotm.add(new Card(Suit.HEARTS, i));
+		}
+		sotm.add(new Card(Suit.SPADES, 12));
+		Collections.sort(sotm);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	private void clubCheck() {
+
+		Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
+
+		while(iter.hasNext()) {
+
+			Card c = iter.next();
+			if (c.equals(new Card(Suit.CLUBS, 2))) {
+				trick.addtoTrick(c, this);
+				table.setTurn(this);
+				table.incTurn();
+				iter.remove();
+				//this.getThrownCard().putMVar(c);
+				System.out.println("Club check" + "Player " + this.getPlayerId() + ": " + this.getPlayerHand().getCards());
+				System.out.println("Player : " + this.getPlayerId() + "\t Current Trick: " + trick.getTrickCards());
+			}
+		}
+		
+	}
+		
+	private void heartCheck() {
+		trick.getTrickCards().forEach(x -> { 
+			if (x.getSuit() == Suit.HEARTS) {
+				table.setHeartState(false);
+			}
+		});
+
+	}
+	private void printScore() {
+		System.out.println("Player " + this.playerId + ": has finished with the score of " + this.getScore());
+		System.out.println("Player " + this.playerId + ": Trick Cards Won: " + this.getTrickCardsWon());
+		System.out.println("Player " + this.playerId + ": Current Hand: " + this.getPlayerHand() + "\n");
+	}
+}

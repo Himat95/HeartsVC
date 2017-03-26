@@ -9,7 +9,7 @@ import java.util.function.*;
 import java.util.stream.Collector;
 
 
-public class AIPlayer extends Thread {
+public class AIPlayer extends Thread implements Player {
 
 	private String playerName;
 	private int playerScore;
@@ -71,7 +71,7 @@ public class AIPlayer extends Thread {
 		this.clubCheck();
 
 
-		while (table.getIsGameFinished() == false) {
+		while (this.getPlayerHand().getCards().isEmpty() == false) {
 
 			//System.out.println(this.playerId + ": Phase 1");
 				if (table.getTurn() == this.playerId && table.isPlay() == true && table.isResults() == false) {
@@ -290,7 +290,7 @@ public class AIPlayer extends Thread {
 				table.incTurn();
 				iter.remove();
 				//this.getThrownCard().putMVar(c);
-				System.out.println("Club check" + "Player " + this.getPlayerId() + ": " + this.getPlayerHand().getCards());
+				System.out.println("Club check" + "Player" + this.getPlayerId() + ": " + this.getPlayerHand().getCards());
 				System.out.println("Player : " + this.getPlayerId() + "\t Current Trick: " + trick.getTrickCards());
 			}
 		}

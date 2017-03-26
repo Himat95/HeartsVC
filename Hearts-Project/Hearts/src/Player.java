@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public interface Player {
 
-	void setPlayerName(String s);
+//	void setPlayerName(String s);
 	String getPlayerName();
 
 	void setScore(int i);
@@ -11,7 +11,7 @@ public interface Player {
 	void decScore();
 	void resetScore();
 	
-	void setPlayerId(int i);
+//	void setPlayerId(int i);
 	int getPlayerId();
 	Hand getPlayerHand();
 	ArrayList<Card> getTrickCardsWon();
