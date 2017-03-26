@@ -9,7 +9,6 @@ public class Hand {
 	private Card thrown;
 	private ArrayList<Card> used = new ArrayList<Card>();
 
-// I HAVE NO CONSTRUCTOR?!
 
 	public Hand() {
 		this.hand  = new ArrayList<Card>(); 
@@ -94,7 +93,7 @@ public class Hand {
 	
 	public Card throwExactCard(Card c) {
 		thrown = c; 
-		hand.remove(c); 
+		this.removeCard(c); 
 		return thrown;
 	}
 
