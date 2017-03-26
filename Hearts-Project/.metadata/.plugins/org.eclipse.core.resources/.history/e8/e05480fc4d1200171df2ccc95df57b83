@@ -105,7 +105,6 @@ public class Trick {
 
 	public void clearTrick() {
 		trickCards.clear();
-		playerlist.clear();
 	}
 
 	public String toString() {

@@ -113,6 +113,7 @@ public class AIPlayer extends Thread {
 						//System.out.println(this.playerId + " Phase 5");
 					} // greedy heuristic
 					System.out.println("player: " + this.getPlayerId() + "\t Current Trick: " + trick.getTrickCards());
+					this.heartCheck(); 
 				}
 					
 				}// if table turn == this player
@@ -156,6 +157,7 @@ public class AIPlayer extends Thread {
 					}
 				}
 
+				
 				//this.setReady(false);
 
 //			}
@@ -174,6 +176,14 @@ public class AIPlayer extends Thread {
 
 	}
 
+	private void heartCheck() {
+		trick.getTrickCards().forEach(x -> { 
+			if (x.getSuit() == Suit.HEARTS) {
+				table.setHeartState(false);
+			}
+		});
+
+	}
 	private void printScore() {
 		System.out.println("Player " + this.playerId + ": has finished with the score of " + this.getScore());
 		System.out.println("Player " + this.playerId + ": Trick Cards Won: " + this.getTrickCardsWon());
@@ -239,19 +249,13 @@ public class AIPlayer extends Thread {
 
 
 	private void emptyTrickwithHeartStateOff() {
-		drop = trick.getTrickCards().stream()
-				.filter(x -> trick.getTrickCards().get(0).getSuit() == x.getSuit())
-				.max(compareByValue).get();
-
-
-		this.getPlayerHand().getCards().stream()
-		.filter(x -> x.getSuit() == drop.getSuit()).forEach(suitableCards::add);
-
-
+		
 		//this.getThrownCard().putMVar(this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get()));
 
-		trick.addtoTrick(suitableCards.stream().min(compareByValue).get(), this);
-		this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get());
+		trick.addtoTrick(this.getPlayerHand().getCards().stream().min(compareByValue).get(), this);
+		System.out.println(this.getPlayerId() + " " + this.getPlayerHand().getCards());
+		this.getPlayerHand().throwExactCard(this.getPlayerHand().getCards().stream().min(compareByValue).get());
+		//this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get());
 		table.incTurn();
 
 		suitableCards.clear();
@@ -260,14 +264,15 @@ public class AIPlayer extends Thread {
 
 
 	private void emptyTrickwithHeartStateOn() {
-		this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS)
-		.forEach(suitableCards::add);
+		trick.addtoTrick(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).min(compareByValue).get(), this);
+		this.getPlayerHand().throwExactCard(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).min(compareByValue).get());
+		//.forEach(suitableCards::add);
 
 		//this.getThrownCard().putMVar(this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get()));
-		trick.addtoTrick(suitableCards.stream().min(compareByValue).get(), this);
-		this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get());
+//		trick.addtoTrick(suitableCards.stream().min(compareByValue).get(), this);
+//		this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get());
 		table.incTurn();
-		suitableCards.clear();
+//		suitableCards.clear();
 
 
 	}
