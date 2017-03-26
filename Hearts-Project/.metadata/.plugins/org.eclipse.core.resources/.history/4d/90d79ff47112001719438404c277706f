@@ -83,12 +83,11 @@ public class HumanPlayer extends Thread implements Player {
 					synchronized (trick) {
 
 						while (reading != true) {
-							System.out.println("Player: " + this.getPlayerId() + "Please choose a card, use format '12 C' or '4 C' or '14 C'");
+							System.out.println("Please choose a card, use format 'C 12'");
 							System.out.println("Your Cards: " + this.getPlayerHand().getCards());
 							Scanner sc = new Scanner(System.in); 
-							Integer i = sc.nextInt();
 							String s = sc.next();
-							
+							Integer i = sc.nextInt();
 							
 							
 						switch(s) {
@@ -96,18 +95,6 @@ public class HumanPlayer extends Thread implements Player {
 						case ("S"): c = new Card(Suit.SPADES, i); break;
 						case ("H"): c = new Card(Suit.HEARTS, i); break;
 						case ("D"): c = new Card(Suit.DIAMONDS, i); break;
-						case ("c"): c = new Card(Suit.CLUBS, i); break;
-						case ("s"): c = new Card(Suit.SPADES, i); break;
-						case ("h"): c = new Card(Suit.HEARTS, i); break;
-						case ("d"): c = new Card(Suit.DIAMONDS, i); break;
-						case ("Club"): c = new Card(Suit.CLUBS, i); break;
-						case ("Spades"): c = new Card(Suit.SPADES, i); break;
-						case ("Hearts"): c = new Card(Suit.HEARTS, i); break;
-						case ("Diamonds"): c = new Card(Suit.DIAMONDS, i); break;
-						case ("clubs"): c = new Card(Suit.CLUBS, i); break;
-						case ("spades"): c = new Card(Suit.SPADES, i); break;
-						case ("hearts"): c = new Card(Suit.HEARTS, i); break;
-						case ("diamonds"): c = new Card(Suit.DIAMONDS, i); break;
 						default: reading = false; 
 						System.out.println("Please put in a valid choice!"); 
 						break;
@@ -124,20 +111,20 @@ public class HumanPlayer extends Thread implements Player {
 						Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
 
 						while(iter.hasNext()) {
+
 							Card x = iter.next();
 							if (x.equals(c)) {
-								trick.addtoTrick(x, this);
+								trick.addtoTrick(c, this);
+								table.setTurn(this);
+								table.incTurn();
 								iter.remove();
-								reading = true;
 							}
-						}
 						
 						
 						if (reading == false) {
 							System.out.println("Invalid Card!");
 						}
 						}
-						reading = false; 
 						System.out.println("player: " + this.getPlayerId() + "\t Current Trick: " + trick.getTrickCards());
 						this.heartCheck(); 
 						table.incTurn();
