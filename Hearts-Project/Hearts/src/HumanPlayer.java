@@ -17,6 +17,7 @@ public class HumanPlayer extends Thread implements Player {
 	private Card c;
 	private boolean reading = false;
 	public static Comparator<Card> compareByValue = Comparator.comparingInt(Card::getValue);
+	private Scanner sc;
 
 
 
@@ -28,6 +29,7 @@ public class HumanPlayer extends Thread implements Player {
 		trickCardsWon = new ArrayList<Card>();
 		this.table = table;
 		this.trick = trick;
+		sc = new Scanner(System.in);
 
 
 		for (int i = 2; i <= 14; i++) {
@@ -56,8 +58,11 @@ public class HumanPlayer extends Thread implements Player {
 
 		System.out.println("Starting Game|  Player " + this.getPlayerId() + ": " + this.getPlayerHand().getCards());
 
+		this.swap();
+		
 		this.clubCheck();
 
+		
 
 		//while (this.getPlayerHand().getCards().isEmpty() == false) {
 			while (table.getIsGameFinished() == false) {
@@ -86,7 +91,6 @@ public class HumanPlayer extends Thread implements Player {
 						while (reading != true) {
 							System.out.println("Player: " + this.getPlayerId() + "Please choose a card, use format '12 C' or '4 C' or '14 C'");
 							System.out.println("Your Cards: " + this.getPlayerHand().getCards());
-							Scanner sc = new Scanner(System.in);
 							Integer i = sc.nextInt();
 							String s = sc.next();
 							
@@ -207,7 +211,7 @@ public class HumanPlayer extends Thread implements Player {
 		}
 			
 			try {
-				this.sleep(1000);
+				this.sleep(4000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -219,8 +223,80 @@ public class HumanPlayer extends Thread implements Player {
 
 
 
+	private Card constructor(int i, String s, Card c) {
+		switch(s) {
+		case ("C"): c = new Card(Suit.CLUBS, i); break;
+		case ("S"): c = new Card(Suit.SPADES, i); break;
+		case ("H"): c = new Card(Suit.HEARTS, i); break;
+		case ("D"): c = new Card(Suit.DIAMONDS, i); break;
+		case ("c"): c = new Card(Suit.CLUBS, i); break;
+		case ("s"): c = new Card(Suit.SPADES, i); break;
+		case ("h"): c = new Card(Suit.HEARTS, i); break;
+		case ("d"): c = new Card(Suit.DIAMONDS, i); break;
+		case ("Clubs"): c = new Card(Suit.CLUBS, i); break;
+		case ("Spades"): c = new Card(Suit.SPADES, i); break;
+		case ("Hearts"): c = new Card(Suit.HEARTS, i); break;
+		case ("Diamonds"): c = new Card(Suit.DIAMONDS, i); break;
+		case ("clubs"): c = new Card(Suit.CLUBS, i); break;
+		case ("spades"): c = new Card(Suit.SPADES, i); break;
+		case ("hearts"): c = new Card(Suit.HEARTS, i); break;
+		case ("diamonds"): c = new Card(Suit.DIAMONDS, i); break;
+		default: reading = false;
+		System.out.println("Please put in a valid choice!");
+		break;
+		}
+		return c;
+	}
 
+	private void swap() {
+		System.out.println("Please input for swap 3 Cards for swapping, press return key (Enter) after each input e.g. '12 c' or 13' C\n");
+		System.out.println("Your Cards: " + this.getPlayerHand().getCards());
+		
+		Card a = null, b = null, c = null;
+		
+		Integer i = sc.nextInt();
+		String s = sc.next();
+		
+		Integer i2 = sc.nextInt();
+		String s2 = sc.next();
+		
+		Integer i3 = sc.nextInt();
+		String s3 = sc.next();
 
+		a = this.constructor(i, s, a); 
+		b = this.constructor(i2, s2, b);
+		c = this.constructor(i3, s3, c); 
+		
+		System.out.println("Player: " + this.playerId + "swapping " + a + b + c);
+		
+		table.SwapCards(a, b, c, playerId);
+				
+		Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
+		while(iter.hasNext()) {
+			Card x = iter.next();
+			if (x.equals(a) || x.equals(b) || x.equals(c)) {
+				iter.remove();
+			}
+		}
+		
+		try {
+			this.sleep(4000);
+		} catch (InterruptedException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		
+		this.getPlayerHand().addCards(table.SwappedCards((this.playerId == 3) ? 0 : playerId+1));
+		System.out.println("Player: " + this.playerId + "has " + this.getPlayerHand().getCards());
+		
+		try {
+			this.sleep(2000);
+		} catch (InterruptedException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+	}
 
 	private void clubCheck() {
 

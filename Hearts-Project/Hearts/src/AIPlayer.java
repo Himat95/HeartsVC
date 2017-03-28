@@ -22,9 +22,6 @@ public class AIPlayer extends Thread implements Player {
 	private Trick trick;
 	private Table table;
 	private Card drop;
-	private MVar<Card> throwingCard;
-	private MVar<Integer> result;
-	private Card thrownCard;
 
 
 	public static Comparator<Card> compareByValue = Comparator.comparingInt(Card::getValue);
@@ -39,8 +36,6 @@ public class AIPlayer extends Thread implements Player {
 		trickCardsWon = new ArrayList<Card>();
 		this.table = table;
 		isReady = false;
-		throwingCard = new MVar<Card>();
-		result = new MVar<Integer>();
 		this.trick = trick;
 
 
@@ -69,6 +64,9 @@ public class AIPlayer extends Thread implements Player {
 
 		System.out.println("Starting Game|  Player " + this.getPlayerId() + ": " + this.getPlayerHand().getCards());
 
+		
+		this.swap(); 
+		
 		this.clubCheck();
 
 
@@ -199,6 +197,43 @@ public class AIPlayer extends Thread implements Player {
 
 	}
 
+	private void swap() {
+		Card a, b, c;
+		a = this.getPlayerHand().getCards().stream().max(compareByValue).get();
+		b = this.getPlayerHand().getCards().stream().filter(x -> x !=a).max(compareByValue).get();
+		c = this.getPlayerHand().getCards().stream().filter(x -> x !=b && x != a).max(compareByValue).get();
+		
+		System.out.println("Player: " + this.playerId + "swapping " + a + b + c);
+		
+		table.SwapCards(a, b, c, playerId);
+				
+		Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
+		while(iter.hasNext()) {
+			Card x = iter.next();
+			if (x.equals(a) || x.equals(b) || x.equals(c)) {
+				iter.remove();
+			}
+		}
+		
+		try {
+			this.sleep(1000*40);
+		} catch (InterruptedException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		
+		
+		this.getPlayerHand().addCards(table.SwappedCards((this.playerId == 3) ? 0 : playerId+1));
+		System.out.println("Player: " + this.playerId + "has " + this.getPlayerHand().getCards());
+		
+		try {
+			this.sleep(2000);
+		} catch (InterruptedException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+	}
+	
 	private void heartCheck() {
 		trick.getTrickCards().forEach(x -> {
 			if (x.getSuit() == Suit.HEARTS) {
@@ -346,13 +381,6 @@ public class AIPlayer extends Thread implements Player {
 	}
 
 
-	public synchronized MVar<Integer> getResult() {
-		return result;
-	}
-
-	public synchronized MVar<Card> getThrownCard() {
-		return throwingCard;
-	}
 
 	public String getPlayerName() {
 		return playerName;

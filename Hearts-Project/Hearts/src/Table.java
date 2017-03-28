@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -14,6 +16,7 @@ public class Table extends Thread {
 	private boolean results;
 	private int count;
 	private Comparator<Player> comp = (x1 ,x2) -> Integer.compare(x1.getScore(), x2.getScore());
+	private ArrayList<Pair<ArrayList<Card>, Integer>> swappedCards; 
 
 
 
@@ -27,6 +30,8 @@ public class Table extends Thread {
 		this.queue = queue2;
 		this.trick = trick;
 		count=0;
+		swappedCards = new ArrayList<Pair<ArrayList<Card>, Integer>>(); 
+		turn = 5; 
 	}
 
 
@@ -102,6 +107,26 @@ public class Table extends Thread {
 	}
 
 
+	public synchronized void SwapCards(Card a, Card b, Card c, int i) {
+		ArrayList<Card> temp = new ArrayList<>();  
+
+		temp.addAll(Arrays.asList(a, b, c)); 
+		swappedCards.add(new Pair<ArrayList<Card>, Integer>(temp, i)); 
+		
+	}
+	
+	public synchronized ArrayList<Card> SwappedCards(int i) {
+		ArrayList<Card> temp = new ArrayList<Card>(); 
+		
+		swappedCards.forEach(x -> {
+			if (x.snd().intValue() == i) {
+				 temp.addAll(x.fst());
+			}
+		});
+		return temp;
+		//return swappedCards.stream().filter(x -> i == x.snd()).map(x -> x.fst()).toArray();
+	}
+	
 	public Trick getTrick() {
 		return trick;
 	}
