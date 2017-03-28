@@ -1,0 +1,147 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+public class EasyAIPlayer implements Player {
+	
+	private String playerName;
+	private int playerScore;
+	private int playerId;
+	private Hand hand;
+	private ArrayList<Card> trickCardsWon;
+	private ArrayList<Card> suitableCards = new ArrayList<Card>();;
+	private ArrayList<Card> sotm = new ArrayList<>();
+	private boolean isReady;
+	private Trick trick;
+	private Table table;
+	private Card drop;
+	private MVar<Card> throwingCard;
+	private MVar<Integer> result;
+	private Card thrownCard;
+
+
+	public static Comparator<Card> compareByValue = Comparator.comparingInt(Card::getValue);
+
+
+
+	public EasyAIPlayer(String n, int id, Table table, Trick trick) {
+		playerName = n;
+		playerScore = 0;
+		playerId = id;
+		hand = new Hand();
+		trickCardsWon = new ArrayList<Card>();
+		this.table = table;
+		isReady = false;
+		throwingCard = new MVar<Card>();
+		result = new MVar<Integer>();
+		this.trick = trick;
+
+
+		for (int i = 2; i <= 14; i++) {
+			sotm.add(new Card(Suit.HEARTS, i));
+		}
+		sotm.add(new Card(Suit.SPADES, 12));
+		Collections.sort(sotm);
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public String getPlayerName() {
+		return playerName;
+	}
+
+
+	public void setScore(int i) {
+		playerScore += i;
+	}
+	
+	public void hardScoreReset(int i) {
+		playerScore = i;
+	}
+
+
+	public int getScore() {
+		return playerScore;
+	}
+
+
+	public void incScore() {
+		playerScore++;
+	}
+
+
+	public void decScore() {
+		playerScore--;
+	}
+
+	public void resetScore() {
+		playerScore = 0;
+	}
+
+
+	public int getPlayerId() {
+		return playerId;
+	}
+
+
+	public Hand getPlayerHand() {
+		return hand;
+	}
+
+
+	public String toString() {
+		return "Player ID: " + playerId + " \t " + "Player: " + playerName + "\t Player Score: " + playerScore;
+	}
+
+
+	public ArrayList<Card> getTrickCardsWon() {
+		return trickCardsWon;
+	}
+
+
+	public void addToTrickCardsWon(ArrayList<Card> tc) {
+		trickCardsWon.addAll(tc);
+	}
+
+
+	public boolean ShotOverTheMoon() {
+		return trickCardsWon.containsAll(sotm);
+	}
+
+	public ArrayList<Card> getsotm() {
+		return sotm;
+	}
+
+
+	public void sortTrickCardsWon() {
+		Collections.sort(trickCardsWon);
+	}
+
+
+
+
+
+
+
+
+
+}

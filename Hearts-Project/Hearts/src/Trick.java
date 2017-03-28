@@ -55,6 +55,7 @@ public class Trick {
 		trickCards.iterator().forEachRemaining(x -> {
 			if (x.equals(queenSpade)) {
 				scoreCount += 13;
+				System.out.println(x);
 			}
 		});
 

@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class Table extends Thread {
@@ -11,6 +12,8 @@ public class Table extends Thread {
 	private ArrayBlockingQueue<Player> queue;
 	private boolean play;
 	private boolean results;
+	private int count;
+	private Comparator<Player> comp = (x1 ,x2) -> Integer.compare(x1.getScore(), x2.getScore());
 
 
 
@@ -23,6 +26,7 @@ public class Table extends Thread {
 		results = false;
 		this.queue = queue2;
 		this.trick = trick;
+		count=0;
 	}
 
 
@@ -65,96 +69,35 @@ public class Table extends Thread {
 			}
 		});*/
 
-
-		while(this.getTrickNo() != 13) {
-
-			this.setPlay(true);
-			if (trick.isTrickFull()) {
-				synchronized (trick) {
-					//System.out.println("Table has locked trick...");
-					trick.calculateScore();
-					trick.calculateWinner();
-					//this.setTurn(trick.getWinner());
-					//this.incTrickNo();
-					//trick.clearTrick();
-					//this.setResults(true);
-					//System.out.println("Table has unlocked trick...");
-				}
+		this.setPlay(true);
+		
+		while (this.getTrickNo() !=14) {
+			try {
+				this.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 			
-				else {
-					try {
-						sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-
 		}
-
-/*		while(!trick.isTrickFull()) {
-			this.setPlay(true);
-
-			queue.forEach(x -> {
-				if (x.getPlayerId() == this.getTurn()) {
-					//x.notify();
-
-					while(!x.isReady()) {
-						try {
-							this.wait();
-						} catch (InterruptedException e) {
-							System.err.println("Table died! Nooo");
-							e.printStackTrace();
-						}
-					}
-
-					trick.addtoTrick(x.getThrownCard().takeMVar());
-				}
-			});
-
-			//this.incTurn();
-
-		}
-
-		this.setPlay(false);
-
-*/
-		/* ----------------------------------Split Section------------------------------- */
-
-/*
-		if (this.isResults()) {
-			trick.calculateScore();
-			trick.calculateWinner();
-
-		}*/
-
-
-
-
-/*		queue.forEach(x -> {
-			if (x.getPlayerHand().lastThrownCard() == trick.calculateWinner()) {
-				trick.setWinner(x);
-				//x.setScore(t.getScoreCount());
-				x.getResult().putMVar(trick.getScoreCount());
-				x.addToTrickCardsWon(trick.getTrickCards());
-				this.setTurn(x);
+		System.out.println("Breaking loop");
+		queue.forEach(x -> {
+			if (x.ShotOverTheMoon()) {
+				queue.iterator().forEachRemaining(x2 -> x2.hardScoreReset(26));
+				x.resetScore();
+				System.out.println("Player: " + x.getPlayerId() + " " +
+				x.getPlayerName() + " HAS SHOT OVER THE MOON!");
 			}
-		}); //IM MODIFYING STATE! Let player add his own score!
-
-		this.setResults(false);
-*/
-/*		trick.clearTrick();
-		this.incTrickNo();
-		}*/
+		});
 		try {
-			sleep(5000);
+			this.sleep(8000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		this.setIsGameFinished(true);
-		System.out.println("Table turning lifeless...");
+		System.out.println("Winner is... " + queue.stream().min(comp).get());
+		
 
 	}
 

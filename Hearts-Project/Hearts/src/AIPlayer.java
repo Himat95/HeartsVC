@@ -24,7 +24,8 @@ public class AIPlayer extends Thread implements Player {
 	private Card drop;
 	private MVar<Card> throwingCard;
 	private MVar<Integer> result;
-	private Card thrownCard; 
+	private Card thrownCard;
+
 
 	public static Comparator<Card> compareByValue = Comparator.comparingInt(Card::getValue);
 
@@ -71,8 +72,8 @@ public class AIPlayer extends Thread implements Player {
 		this.clubCheck();
 
 
-		while (this.getPlayerHand().getCards().isEmpty() == false) {
-
+		//while (this.getPlayerHand().getCards().isEmpty() == false) {
+			while (table.getIsGameFinished() == false) {
 			//System.out.println(this.playerId + ": Phase 1");
 				if (table.getTurn() == this.playerId && table.isPlay() == true && table.isResults() == false) {
 
@@ -81,6 +82,10 @@ public class AIPlayer extends Thread implements Player {
 					//System.out.println(this.playerId + ": Phase 4");
 					if (trick.getTrickCards().isEmpty() == true) {
 
+						if(this.getPlayerHand().getCards().isEmpty()){
+							break;
+							}
+						else{
 						if (table.getHeartState() == true) { // Can't throw
 																// hearts yet!
 							System.out.println("Player: " + this.playerId + "\t Empty Trick with Hearts On");
@@ -90,6 +95,7 @@ public class AIPlayer extends Thread implements Player {
 						else {
 							System.out.println("Player: " + this.playerId + "\t Empty Trick with Hearts Off");
 							this.emptyTrickwithHeartStateOff();
+						}
 						}
 
 					}
@@ -107,18 +113,23 @@ public class AIPlayer extends Thread implements Player {
 						}
 
 						else {
+							if(this.getPlayerHand().getCards().isEmpty()){
+								break;
+								}
+							else {
 							System.out.println("Player: " + this.playerId + "\t Throwing lowest suitable");
 							this.throwLowestSuitable();
+							}
 						}
 						//System.out.println(this.playerId + " Phase 5");
 					} // greedy heuristic
 					System.out.println("player: " + this.getPlayerId() + "\t Current Trick: " + trick.getTrickCards());
-					this.heartCheck(); 
+					this.heartCheck();
 				}
-					
+
 				}// if table turn == this player
 
-
+				
 				if (table.isResults() == true) {
 					System.out.println("Player: " + this.playerId + " Entered Results");
 					//table.setPlay(false);
@@ -129,7 +140,7 @@ public class AIPlayer extends Thread implements Player {
 						} catch (InterruptedException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
-						} 
+						}
 					if (this == trick.getWinner()) {
 						System.out.println("Player: " + this.playerId + " is the trick winner... " + "Actual winner is... " + trick.getWinner().getPlayerId());
 							synchronized (trick) {
@@ -155,9 +166,11 @@ public class AIPlayer extends Thread implements Player {
 						}
 					}
 					}
+					if(this.getPlayerHand().getCards().isEmpty())
+					{break;}
 				}
 
-				
+
 				//this.setReady(false);
 
 //			}
@@ -170,26 +183,37 @@ public class AIPlayer extends Thread implements Player {
 			}
 				}
 		} // Game is finished after this
+			
+			try {
+				this.sleep(4000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-		
-		this.printScore(); 
+
+/*			if (this.ShotOverTheMoon()) {
+				
+			}*/
+		this.printScore();
 
 	}
 
 	private void heartCheck() {
-		trick.getTrickCards().forEach(x -> { 
+		trick.getTrickCards().forEach(x -> {
 			if (x.getSuit() == Suit.HEARTS) {
 				table.setHeartState(false);
 			}
 		});
 
 	}
-	private void printScore() {
+	private synchronized void printScore() {
+		Collections.sort(this.getTrickCardsWon());
 		System.out.println("Player " + this.playerId + ": has finished with the score of " + this.getScore());
 		System.out.println("Player " + this.playerId + ": Trick Cards Won: " + this.getTrickCardsWon());
 		System.out.println("Player " + this.playerId + ": Current Hand: " + this.getPlayerHand() + "\n");
 	}
-	
+
 	private void throwLowestSuitable() {
 		drop = trick.getTrickCards().stream()
 				.filter(x -> trick.getTrickCards().get(0).getSuit() == x.getSuit())
@@ -203,9 +227,9 @@ public class AIPlayer extends Thread implements Player {
 		if (suitableCards.isEmpty()) {
 			//this.getThrownCard().putMVar(this.getPlayerHand().throwExactCard(this.getPlayerHand().getCards().stream().max(compareByValue).get()));
 			//this.setReady(true);
-			
-			trick.addtoTrick(this.getPlayerHand().getCards().stream().max(compareByValue).get(), this);
-			this.getPlayerHand().throwExactCard(this.getPlayerHand().getCards().stream().max(compareByValue).get());
+
+			trick.addtoTrick(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() == Suit.HEARTS).max(compareByValue).orElse(this.getPlayerHand().getCards().stream().max(compareByValue).get()), this);
+			this.getPlayerHand().throwExactCard(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() == Suit.HEARTS).max(compareByValue).orElse(this.getPlayerHand().getCards().stream().max(compareByValue).get()));
 			table.incTurn();
 		}
 
@@ -244,12 +268,11 @@ public class AIPlayer extends Thread implements Player {
 		}
 
 		suitableCards.clear(); // housekeeping!
-
+		
 	}
 
 
 	private void emptyTrickwithHeartStateOff() {
-		
 		//this.getThrownCard().putMVar(this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get()));
 
 		trick.addtoTrick(this.getPlayerHand().getCards().stream().min(compareByValue).get(), this);
@@ -259,12 +282,13 @@ public class AIPlayer extends Thread implements Player {
 		table.incTurn();
 
 		suitableCards.clear();
-
+		
 	}
 
 
 	private void emptyTrickwithHeartStateOn() {
-		trick.addtoTrick(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).min(compareByValue).get(), this);
+
+		trick.addtoTrick(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).min(compareByValue).orElse(this.getPlayerHand().getCards().stream().min(compareByValue).get()), this);
 		this.getPlayerHand().throwExactCard(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).min(compareByValue).get());
 		//.forEach(suitableCards::add);
 
@@ -273,7 +297,7 @@ public class AIPlayer extends Thread implements Player {
 //		this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get());
 		table.incTurn();
 //		suitableCards.clear();
-
+		
 
 	}
 
@@ -308,7 +332,7 @@ public class AIPlayer extends Thread implements Player {
 				}
 			});
 		*/
-			
+
 
 		//System.out.println("Club check" + "Player " + this.getPlayerId() + ": " + this.getPlayerHand().getCards());
 
@@ -337,6 +361,10 @@ public class AIPlayer extends Thread implements Player {
 
 	public void setScore(int i) {
 		playerScore += i;
+	}
+	
+	public void hardScoreReset(int i) {
+		playerScore = i;
 	}
 
 

@@ -1,0 +1,60 @@
+import java.util.Scanner;
+import java.util.concurrent.ArrayBlockingQueue;
+
+public class FinalGame {
+
+	public static void main(String[] args) {
+		ArrayBlockingQueue<Player> queue = new ArrayBlockingQueue<Player>(4);
+
+		Trick trick = new Trick();
+		Table table = new Table(queue, trick);
+
+		Scanner sc = new Scanner(System.in); 
+		
+		int s = sc.nextInt();
+		
+		if (s != 1 || s != 2 || s !=3) {
+			System.out.println("Incorrect input, please select difficulty again...");
+		}
+		
+		else {
+			switch(s) {
+			case 1: 
+				Player p = new HumanPlayer("You", 0, table, trick);
+				Player p2 = new AIPlayer("Raj", 1, table, trick);
+				Player p3 = new AIPlayer("Sunny", 2, table, trick);
+				Player p4 = new AIPlayer("Tarun", 3, table, trick);
+
+				queue.add(p); queue.add(p2); queue.add(p3); queue.add(p4);
+
+				table.start();
+
+				p.start();
+				p2.start();
+				p3.start();
+				p4.start();
+				break;
+				
+			case 2:
+				Player p1 = new HumanPlayer("You", 0, table, trick);
+				Player ep1 = new EasyAIPlayer("Raj", 1, table, trick);
+				Player ep2 = new EasyAIPlayer("Sunny", 2, table, trick);
+				Player ep3 = new EasyAIPlayer("Tarun", 3, table, trick);
+
+				queue.add(p1); queue.add(ep2); queue.add(ep3); queue.add(ep4);
+
+				table.start();
+
+				p1.start();
+				ep1.start();
+				ep2.start();
+				ep3.start();
+				break;
+				
+			case 3: System.exit(0); 
+			default: System.out.println("Invalid option"); 
+			}
+	}
+	}
+
+}
