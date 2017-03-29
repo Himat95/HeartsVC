@@ -53,7 +53,6 @@ public class AIPlayer extends Thread implements Player {
 	@Override
 	public void run() {
 
-
 		try {
 			this.sleep(1000);
 		} catch (InterruptedException e) {
@@ -64,97 +63,95 @@ public class AIPlayer extends Thread implements Player {
 
 		System.out.println("Starting Game|  Player " + this.getPlayerId() + ": " + this.getPlayerHand().getCards());
 
-		
-		this.swap(); 
-		
+		this.swap();
+
 		this.clubCheck();
 
+		// while (this.getPlayerHand().getCards().isEmpty() == false) {
+		while (table.getIsGameFinished() == false) {
+			// System.out.println(this.playerId + ": Phase 1");
+			if (table.getTurn() == this.playerId && table.isPlay() == true && table.isResults() == false) {
 
-		//while (this.getPlayerHand().getCards().isEmpty() == false) {
-			while (table.getIsGameFinished() == false) {
-			//System.out.println(this.playerId + ": Phase 1");
-				if (table.getTurn() == this.playerId && table.isPlay() == true && table.isResults() == false) {
+				synchronized (trick) {
 
-					synchronized (trick) {
-
-					//System.out.println(this.playerId + ": Phase 4");
+					
 					if (trick.getTrickCards().isEmpty() == true) {
 
-						if(this.getPlayerHand().getCards().isEmpty()){
+						if (this.getPlayerHand().getCards().isEmpty()) {
 							break;
-							}
-						else{
-						if (table.getHeartState() == true) { // Can't throw
-																// hearts yet!
-							System.out.println("Player: " + this.playerId + "\t Empty Trick with Hearts On");
-							this.emptyTrickwithHeartStateOn();
-						}
-
+						} 
+						
+						
 						else {
-							System.out.println("Player: " + this.playerId + "\t Empty Trick with Hearts Off");
-							this.emptyTrickwithHeartStateOff();
-						}
+							if (table.getHeartState() == true) { // Can't throw Hearts yet!
+																	
+								System.out.println("Player: " + this.playerId + "\t Empty Trick with Hearts On");
+								this.emptyTrickwithHeartStateOn();
+							}
+
+							else { //Can throw Hearts
+								System.out.println("Player: " + this.playerId + "\t Empty Trick with Hearts Off");
+								this.emptyTrickwithHeartStateOff();
+							}
 						}
 
 					}
 
 					else {
-						if(trick.isTrickFull()) {
+						if (trick.isTrickFull()) {
 							synchronized (trick) {
-							System.out.println("Player: " + this.playerId + "\t Trick is full");
-							table.setPlay(false);
-							table.setResults(true);
-							trick.calculateScore();
-							trick.calculateWinner();
-							table.setTurn(trick.getWinner());
+								System.out.println("Player: " + this.playerId + "\t Trick is full");
+								table.setPlay(false);
+								table.setResults(true);
+								trick.calculateScore();
+								trick.calculateWinner();
+								table.setTurn(trick.getWinner());
 							}
 						}
 
 						else {
-							if(this.getPlayerHand().getCards().isEmpty()){
+							if (this.getPlayerHand().getCards().isEmpty()) {
 								break;
-								}
-							else {
-							System.out.println("Player: " + this.playerId + "\t Throwing lowest suitable");
-							this.throwLowestSuitable();
+							} else {
+								System.out.println("Player: " + this.playerId + "\t Throwing lowest suitable");
+								this.throwLowestSuitable();
 							}
 						}
-						//System.out.println(this.playerId + " Phase 5");
+						// System.out.println(this.playerId + " Phase 5");
 					} // greedy heuristic
 					System.out.println("player: " + this.getPlayerId() + "\t Current Trick: " + trick.getTrickCards());
 					this.heartCheck();
 				}
 
-				}// if table turn == this player
+			} // if table turn == this player
 
-				
-				if (table.isResults() == true) {
-					System.out.println("Player: " + this.playerId + " Entered Results");
-					//table.setPlay(false);
-					while(table.isResults() == true) {
-						try {
-							System.out.println("Player: " + this.playerId + " Going to sleep");
-							sleep(1000);
-						} catch (InterruptedException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+			if (table.isResults() == true) {
+				System.out.println("Player: " + this.playerId + " Entered Results");
+				// table.setPlay(false);
+				while (table.isResults() == true) {
+					try {
+						System.out.println("Player: " + this.playerId + " Going to sleep");
+						sleep(1000);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					if (this == trick.getWinner()) {
-						System.out.println("Player: " + this.playerId + " is the trick winner... " + "Actual winner is... " + trick.getWinner().getPlayerId());
-							synchronized (trick) {
-						System.out.println("Player: " + this.playerId + " is getting Results...");
-						this.setScore(trick.getScoreCount());
-						System.out.println("Player: " + this.playerId + " score is... " + trick.getScoreCount());
-						this.addToTrickCardsWon(trick.getTrickCards());
-						System.out.println("Player: " + this.playerId + " score is... " + trick.getTrickCards());
-						trick.clearTrick();
-						table.incTrickNo();
-						trick.resetScore();
-						table.setResults(false);
-						table.setPlay(true);
-							}
+						System.out.println("Player: " + this.playerId + " is the trick winner... "
+								+ "Actual winner is... " + trick.getWinner().getPlayerId());
+						synchronized (trick) {
+							System.out.println("Player: " + this.playerId + " is getting Results...");
+							this.setScore(trick.getScoreCount());
+							System.out.println("Player: " + this.playerId + " score is... " + trick.getScoreCount());
+							this.addToTrickCardsWon(trick.getTrickCards());
+							System.out.println("Player: " + this.playerId + " score is... " + trick.getTrickCards());
+							trick.clearTrick();
+							table.incTrickNo();
+							trick.resetScore();
+							table.setResults(false);
+							table.setPlay(true);
 						}
-					else {
+					} else {
 						try {
 							System.out.println("Player: " + this.playerId + " Going to sleep using else");
 							sleep(1000);
@@ -163,36 +160,33 @@ public class AIPlayer extends Thread implements Player {
 							e.printStackTrace();
 						}
 					}
-					}
-					if(this.getPlayerHand().getCards().isEmpty())
-					{break;}
 				}
-
-
-				//this.setReady(false);
-
-//			}
-				else {
-			try {
-				this.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				if (this.getPlayerHand().getCards().isEmpty()) {
+					break;
+				}
 			}
+
+			// this.setReady(false);
+
+			// }
+			else {
+				try {
+					this.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+			}
 		} // Game is finished after this
-			
-			try {
-				this.sleep(4000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+		try {
+			this.sleep(4000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 
-/*			if (this.ShotOverTheMoon()) {
-				
-			}*/
 		this.printScore();
 
 	}
@@ -264,7 +258,7 @@ public class AIPlayer extends Thread implements Player {
 			//this.setReady(true);
 
 			trick.addtoTrick(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() == Suit.HEARTS).max(compareByValue).orElse(this.getPlayerHand().getCards().stream().max(compareByValue).get()), this);
-			this.getPlayerHand().throwExactCard(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() == Suit.HEARTS).max(compareByValue).orElse(this.getPlayerHand().getCards().stream().max(compareByValue).get()));
+			this.getPlayerHand().removeCard(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() == Suit.HEARTS).max(compareByValue).orElse(this.getPlayerHand().getCards().stream().max(compareByValue).get()));
 			table.incTurn();
 		}
 
@@ -285,9 +279,17 @@ public class AIPlayer extends Thread implements Player {
 
 				//this.getThrownCard().putMVar(this.getPlayerHand().throwExactCard(suitableCards.get(suitableCards.size() - 1)));
 				//this.setReady(true);
+				if (trick.getTrickCards().size() < 3) {
+					trick.addtoTrick(suitableCards.get(0), this);
+					this.getPlayerHand().removeCard(suitableCards.get(0)); 
+					table.incTurn();
+				}
+				
+				else {
 				trick.addtoTrick(suitableCards.get(suitableCards.size() - 1), this);
-				this.getPlayerHand().throwExactCard(suitableCards.get(suitableCards.size() - 1));
+				this.getPlayerHand().removeCard(suitableCards.get(suitableCards.size() - 1));
 				table.incTurn();
+				}
 			}
 
 			else {
@@ -296,7 +298,7 @@ public class AIPlayer extends Thread implements Player {
 				//this.getThrownCard().putMVar(this.getPlayerHand().throwExactCard(lessthandrop.get(lessthandrop.size() - 1)));
 				//this.setReady(true);
 				trick.addtoTrick(lessthandrop.get(lessthandrop.size() - 1), this);
-				this.getPlayerHand().throwExactCard(lessthandrop.get(lessthandrop.size() - 1));
+				this.getPlayerHand().removeCard(lessthandrop.get(lessthandrop.size() - 1));
 				table.incTurn();
 			}
 			lessthandrop.clear(); // housekeeping!
@@ -308,15 +310,11 @@ public class AIPlayer extends Thread implements Player {
 
 
 	private void emptyTrickwithHeartStateOff() {
-		//this.getThrownCard().putMVar(this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get()));
 
 		trick.addtoTrick(this.getPlayerHand().getCards().stream().min(compareByValue).get(), this);
 		System.out.println(this.getPlayerId() + " " + this.getPlayerHand().getCards());
-		this.getPlayerHand().throwExactCard(this.getPlayerHand().getCards().stream().min(compareByValue).get());
-		//this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get());
+		this.getPlayerHand().removeCard(this.getPlayerHand().getCards().stream().min(compareByValue).get());
 		table.incTurn();
-
-		suitableCards.clear();
 		
 	}
 
@@ -324,15 +322,8 @@ public class AIPlayer extends Thread implements Player {
 	private void emptyTrickwithHeartStateOn() {
 
 		trick.addtoTrick(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).min(compareByValue).orElse(this.getPlayerHand().getCards().stream().min(compareByValue).get()), this);
-		this.getPlayerHand().throwExactCard(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).min(compareByValue).get());
-		//.forEach(suitableCards::add);
-
-		//this.getThrownCard().putMVar(this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get()));
-//		trick.addtoTrick(suitableCards.stream().min(compareByValue).get(), this);
-//		this.getPlayerHand().throwExactCard(suitableCards.stream().min(compareByValue).get());
+		this.getPlayerHand().removeCard(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).min(compareByValue).get());
 		table.incTurn();
-//		suitableCards.clear();
-		
 
 	}
 

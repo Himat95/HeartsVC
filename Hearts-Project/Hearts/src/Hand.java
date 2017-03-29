@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Random;
 
 public class Hand {
 
@@ -23,7 +22,6 @@ public class Hand {
 	}
 
 	public void removeCard(Card c) {
-		
 		for (Iterator<Card> it = hand.iterator(); it.hasNext();) {
 			Card temp = it.next(); 
 			if (temp.equals(c)) {
@@ -47,7 +45,6 @@ public class Hand {
 	public void swapCards(ArrayList<Card> ac2, ArrayList<Card> ac) {
 		this.addCards(ac2);
 		this.removeCards(ac);
-
 	}
 
 	public int cardsRemaining() {
@@ -79,16 +76,9 @@ public class Hand {
 	}
 
 	public Card throwCard() {
-		//Random rand = new Random(); 
-		/*	hand.remove(c);
-			this.thrown = c;
-			return c;*/
-		//int n = rand.nextInt(12);
-		
 		thrown = hand.stream().parallel().findAny().get();
 		hand.remove(thrown); 
 		return thrown;  
-			
 	}
 	
 	public Card throwExactCard(Card c) {

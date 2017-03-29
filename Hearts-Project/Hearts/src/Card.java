@@ -1,22 +1,15 @@
 
 public class Card implements Comparable<Card>{
 
-	//------------------fields---------------------
+
 	private final Suit suit;
-/*	private final static int JACK = 11,
-							 QUEEN = 12,
-							 KING = 13,
-							 ACE = 14;
-							 */
 	private final int value;
 
-	//---------------constructor-----------------
 	public Card(Suit cSuit, int cValue) {
 		suit = cSuit;
 		value = cValue;
 	}
 
-	//------------------methods----------------------
 	public Suit getSuit() {
 		return suit;
 	}

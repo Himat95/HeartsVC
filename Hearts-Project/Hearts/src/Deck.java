@@ -3,33 +3,6 @@ import java.util.Collections;
 
 public class Deck {
 
-/*	private Card[] deck;
-
-	public Deck() {
-		deck = new Card[52];
-		int cardCt = 0; //Cards created so far
-
-		for (Suit s : Suit.values()) {
-			for (int value = 2; value <=14; value++) {
-				deck[cardCt] = new Card(s, value);
-				cardCt++;
-			}
-		}
-	}
-
-
-	public String cardsMade() {
-		int i = 0;
-		while (i != 52) {
-			System.out.println(deck[i].toString());
-			i++;
-		}
-		return null;
-	}
-
-
-	*/
-
 	private ArrayList<Card> deck = new ArrayList<Card>();
 
 	public Deck() {
