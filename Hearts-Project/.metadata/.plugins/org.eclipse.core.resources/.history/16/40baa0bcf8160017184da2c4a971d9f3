@@ -135,24 +135,6 @@ public class HumanPlayer extends Thread implements Player {
 									reading = false;
 									System.out.println("Your not allowed to throw Hearts Cards Yet!");
 								}
-								
-								else {
-									Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
-
-									while(iter.hasNext()) {
-										Card x = iter.next();
-										if (x.equals(c)) {
-											trick.addtoTrick(x, this);
-											iter.remove();
-											reading = true;
-											System.out.println("Throwing card... " + c);
-										}
-									}
-									if (reading == false) {
-										System.out.println("Invalid Card!");
-									}
-								}
-								
 							}
 							
 							else {
@@ -293,7 +275,7 @@ public class HumanPlayer extends Thread implements Player {
 		}
 			
 			try {
-				this.sleep(2000);
+				this.sleep(4000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

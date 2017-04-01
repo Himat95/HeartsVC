@@ -14,12 +14,11 @@ public class HumanPlayer extends Thread implements Player {
 	private ArrayList<Card> sotm = new ArrayList<>();
 	private Trick trick;
 	private Table table;
-	private Card c;
+	private Card d;
 	private boolean reading = false;
 	public static Comparator<Card> compareByValue = Comparator.comparingInt(Card::getValue);
 	private Scanner sc;
-	Card a = null, b = null, d = null;
-	boolean constraint;
+	Card a = null, b = null, c = null;
 
 
 
@@ -128,101 +127,21 @@ public class HumanPlayer extends Thread implements Player {
 								}
 						});
 						*/
-						
-						if (trick.getTrickCards().isEmpty()) {
-							if (table.getHeartState()) {
-								if (c.getSuit() == Suit.HEARTS) {
-									reading = false;
-									System.out.println("Your not allowed to throw Hearts Cards Yet!");
-								}
-								
-								else {
-									Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
+						Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
 
-									while(iter.hasNext()) {
-										Card x = iter.next();
-										if (x.equals(c)) {
-											trick.addtoTrick(x, this);
-											iter.remove();
-											reading = true;
-											System.out.println("Throwing card... " + c);
-										}
-									}
-									if (reading == false) {
-										System.out.println("Invalid Card!");
-									}
-								}
-								
-							}
-							
-							else {
-								Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
-
-								while(iter.hasNext()) {
-									Card x = iter.next();
-									if (x.equals(c)) {
-										trick.addtoTrick(x, this);
-										iter.remove();
-										reading = true;
-										System.out.println("Throwing card... " + c);
-									}
-								}
-								if (reading == false) {
-									System.out.println("Invalid Card!");
-								}
-							}
-						}
-						
-						else {
-							long num = this.getPlayerHand().getCards().stream()
-									.filter(x -> x.getSuit() == trick.getTrickCards().get(0).getSuit()).count();
-					
-							if (num == 0) {
-								constraint = false;
-							} else {
-								constraint = true;
-							}
-							
-							if (constraint == true) {
-								if (c.getSuit() != trick.getTrickCards().get(0).getSuit()) {
-									reading = false; 
-									System.out.println("Please use the same suit Card as the first card thrown in the trick!");
-								}
-								
-								else {
-									Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
-
-									while(iter.hasNext()) {
-										Card x = iter.next();
-										if (x.equals(c)) {
-											trick.addtoTrick(x, this);
-											iter.remove();
-											reading = true;
-										}
-									}
-									if (reading == false) {
-										System.out.println("Invalid Card!");
-									}
-								}
-							}
-							
-							else {
-								Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
-
-								while(iter.hasNext()) {
-									Card x = iter.next();
-									if (x.equals(c)) {
-										trick.addtoTrick(x, this);
-										iter.remove();
-										reading = true;
-									}
-								}
-								if (reading == false) {
-									System.out.println("Invalid Card!");
-								}							
+						while(iter.hasNext()) {
+							Card x = iter.next();
+							if (x.equals(c)) {
+								trick.addtoTrick(x, this);
+								iter.remove();
+								reading = true;
 							}
 						}
 
+
+						if (reading == false) {
+							System.out.println("Invalid Card!");
+						}
 						}
 						reading = false;
 						System.out.println("player: " + this.getPlayerId() + "\t Current Trick: " + trick.getTrickCards());
@@ -293,7 +212,7 @@ public class HumanPlayer extends Thread implements Player {
 		}
 			
 			try {
-				this.sleep(2000);
+				this.sleep(4000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -337,69 +256,60 @@ public class HumanPlayer extends Thread implements Player {
 		boolean reading2 = false; 
 		int count = 0; 
 		
-			while (reading2 != true) {
-				reading2 = false;
-				count = 0;
-				System.out.println(
-						"Please input for swap 3 Cards for swapping, press return key (Enter) after each input e.g. '12 c' or 13' C\n");
-				System.out.println("Your Cards: " + this.getPlayerHand().getCards());
+		while(reading2 != true) {
+		System.out.println("Please input for swap 3 Cards for swapping, press return key (Enter) after each input e.g. '12 c' or 13' C\n");
+		System.out.println("Your Cards: " + this.getPlayerHand().getCards());
+		
+		
+		Integer i = sc.nextInt();
+		String s = sc.next();
+		
+		Integer i2 = sc.nextInt();
+		String s2 = sc.next();
+		
+		Integer i3 = sc.nextInt();
+		String s3 = sc.next();
 
-				Integer i = sc.nextInt();
-				String s = sc.next();
+		a = this.constructor(i, s, a); 
+		b = this.constructor(i2, s2, b);
+		c = this.constructor(i3, s3, c); 
+		
+		System.out.println("Player: " + this.playerId + "swapping " + a + b + c);
+		
+		Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
 
-				Integer i2 = sc.nextInt();
-				String s2 = sc.next();
-
-				Integer i3 = sc.nextInt();
-				String s3 = sc.next();
-
-				a = this.constructor(i, s, a);
-				b = this.constructor(i2, s2, b);
-				d = this.constructor(i3, s3, d);
-
-				System.out.println("Player: " + this.playerId + "swapping " + a + b + d);
-
-				Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
-
-				if (a != null && b != null && d != null) {
-
-					while (iter.hasNext()) {
-						Card x = iter.next();
-						if (x.equals(a) || x.equals(b) || x.equals(d)) {
-							count++;
-						}
-					}
-				}
-
-				else {
-					System.out.println("Please select YOUR OWN cards, no cheating!");
-				}
-
-				if (count == 3) {
-					reading2 = true;
-					System.out.println(count);
-				}
-
-				else {
-					reading2 = false;
-					System.out.println(count);
-				}
-
-				if (reading2 == false) {
-					System.out.println("Invalid Cards, please re-select!");
-				}
+		while(iter.hasNext()) {
+			Card x = iter.next();
+			if (x.equals(a) || x.equals(b) || x.equals(c)) {
+				trick.addtoTrick(x, this);
+				iter.remove();
+				count++; 
 			}
+		}
+		
+		if (count != 3) {
+			reading = false; 
+		}
+		
+		else {
+			reading = true;
+		}
 
-			table.SwapCards(a, b, d, playerId);
-
-			Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
-			while (iter.hasNext()) {
-				Card x = iter.next();
-				if (x.equals(a) || x.equals(b) || x.equals(d)) {
-					iter.remove();
-				}
+		if (reading == false) {
+			System.out.println("Invalid Cards, please re-select!");
+		}
+		}
+		
+		table.SwapCards(a, b, c, playerId);
+				
+		Iterator<Card> iter = this.getPlayerHand().getCards().iterator();
+		while(iter.hasNext()) {
+			Card x = iter.next();
+			if (x.equals(a) || x.equals(b) || x.equals(c)) {
+				iter.remove();
 			}
-
+		}
+		
 		}
 		try {
 			this.sleep(1000);
@@ -407,11 +317,12 @@ public class HumanPlayer extends Thread implements Player {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-
+		
+		
 		synchronized (table) {
-			this.getPlayerHand().addCards(table.SwappedCards((this.playerId == 0) ? 3 : playerId - 1));
-			this.getPlayerHand().sortHand();
-			System.out.println("Player: " + this.playerId + "has " + this.getPlayerHand().getCards());
+		this.getPlayerHand().addCards(table.SwappedCards((this.playerId == 0) ? 3 : playerId-1));
+		this.getPlayerHand().sortHand();
+		System.out.println("Player: " + this.playerId + "has " + this.getPlayerHand().getCards());
 		}
 		try {
 			this.sleep(2000);
