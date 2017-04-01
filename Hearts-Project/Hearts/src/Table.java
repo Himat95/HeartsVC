@@ -100,9 +100,10 @@ public class Table extends Thread {
 			e.printStackTrace();
 		}
 		
+		synchronized (trick) {
 		this.setIsGameFinished(true);
 		System.out.println("Winner is... " + queue.stream().min(comp).get());
-		
+		}
 
 	}
 

@@ -5125,3 +5125,169 @@ java.lang.IllegalArgumentException: Illegal value: -1
 	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:673)
 	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:610)
 	at org.eclipse.equinox.launcher.Main.run(Main.java:1519)
+!SESSION 2017-03-31 19:07:24.942 -----------------------------------------------
+eclipse.buildId=4.6.1.M20160907-1200
+java.version=1.8.0_121
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_GB
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.e4.ui.workbench 4 0 2017-03-31 19:07:41.906
+!MESSAGE Unable to retrieve the bundle from the URI: bundleclass://org.eclipse.e4.tools.emf.ui/org.eclipse.e4.tools.emf.ui.internal.handlers.MarkDuplicateElementIdsHandler
+
+!ENTRY org.eclipse.e4.ui.workbench 4 0 2017-03-31 19:07:41.906
+!MESSAGE Unable to retrieve the bundle from the URI: bundleclass://org.eclipse.e4.tools.emf.ui/org.eclipse.e4.tools.emf.ui.internal.handlers.MarkDuplicateLabelsHandler
+
+!ENTRY org.eclipse.e4.ui.workbench 4 0 2017-03-31 19:07:41.922
+!MESSAGE Unable to retrieve the bundle from the URI: bundleclass://org.eclipse.e4.tools.emf.ui/org.eclipse.e4.tools.emf.ui.internal.handlers.MarkDuplicateAttributesHandler
+
+!ENTRY org.eclipse.e4.ui.workbench 4 0 2017-03-31 19:07:41.922
+!MESSAGE Unable to retrieve the bundle from the URI: bundleclass://org.eclipse.e4.tools.emf.ui/org.eclipse.e4.tools.emf.ui.internal.handlers.RepairDuplicateItemsHandler
+
+!ENTRY org.eclipse.e4.ui.workbench 4 0 2017-03-31 19:07:41.922
+!MESSAGE Unable to retrieve the bundle from the URI: bundleclass://org.eclipse.e4.tools.emf.ui/org.eclipse.e4.tools.emf.ui.internal.handlers.UnmarkItemsHandler
+
+!ENTRY org.eclipse.e4.ui.workbench 4 0 2017-03-31 19:07:41.922
+!MESSAGE Unable to retrieve the bundle from the URI: bundleclass://org.eclipse.e4.tools.emf.ui/org.eclipse.e4.tools.emf.ui.internal.handlers.AutosizeColumnsHandler
+
+!ENTRY org.eclipse.e4.ui.workbench 4 0 2017-03-31 19:07:41.922
+!MESSAGE Unable to retrieve the bundle from the URI: bundleclass://org.eclipse.e4.tools.emf.ui/org.eclipse.e4.tools.emf.ui.internal.handlers.ResetToDefaultHandler
+
+!ENTRY org.eclipse.equinox.ds 1 0 2017-03-31 19:07:46.248
+!MESSAGE Could not bind a reference of component org.eclipse.fx.core.internal.JUtilLoggerFactory. The reference is: Reference[name = registerHandler, interface = java.util.logging.Handler, policy = dynamic, policy-option = greedy, cardinality = 0..n, target = null, bind = registerHandler, unbind = unregisterHandler, updated = null]
+
+!ENTRY org.eclipse.egit.ui 2 0 2017-03-31 19:07:47.786
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\Himat'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.equinox.ds 1 0 2017-03-31 19:07:50.189
+!MESSAGE Could not bind a reference of component org.eclipse.fx.ide.css.cssext.ui.internal.DefaultCssExtProvider. The reference is: Reference[name = ICSSExtModelProvider, interface = org.eclipse.fx.ide.css.cssext.ICSSExtModelProvider, policy = dynamic, cardinality = 0..n, target = null, bind = bindCssExtensionModelProvider, unbind = unbindCssExtensionModelProvider]
+
+!ENTRY org.eclipse.ui 4 0 2017-03-31 19:54:00.791
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.StringIndexOutOfBoundsException: String index out of range: -1
+	at java.lang.AbstractStringBuilder.insert(Unknown Source)
+	at java.lang.StringBuffer.insert(Unknown Source)
+	at org.eclipse.ui.internal.console.IOConsolePartition.insert(IOConsolePartition.java:75)
+	at org.eclipse.ui.internal.console.IOConsolePartitioner.documentChanged2(IOConsolePartitioner.java:394)
+	at org.eclipse.jface.text.AbstractDocument.updateDocumentStructures(AbstractDocument.java:671)
+	at org.eclipse.jface.text.AbstractDocument.fireDocumentChanged(AbstractDocument.java:767)
+	at org.eclipse.jface.text.AbstractDocument.replace(AbstractDocument.java:1101)
+	at org.eclipse.jface.text.AbstractDocument.replace(AbstractDocument.java:1119)
+	at org.eclipse.ui.internal.console.ConsoleDocument.replace(ConsoleDocument.java:92)
+	at org.eclipse.ui.internal.console.ConsoleDocumentAdapter.replaceTextRange(ConsoleDocumentAdapter.java:266)
+	at org.eclipse.swt.custom.StyledText.modifyContent(StyledText.java:7374)
+	at org.eclipse.swt.custom.StyledText.sendKeyEvent(StyledText.java:8225)
+	at org.eclipse.swt.custom.StyledText.doBackspace(StyledText.java:2334)
+	at org.eclipse.swt.custom.StyledText.invokeAction(StyledText.java:7164)
+	at org.eclipse.swt.custom.StyledText.handleKey(StyledText.java:6022)
+	at org.eclipse.swt.custom.StyledText.handleKeyDown(StyledText.java:6049)
+	at org.eclipse.swt.custom.StyledText$7.handleEvent(StyledText.java:5733)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4410)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1079)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1103)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1088)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1130)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1126)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1547)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4910)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:364)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4791)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:359)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5102)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessageW(Native Method)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(OS.java:2552)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3814)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$4.run(PartRenderingEngine.java:1121)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1022)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:150)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:687)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:604)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:148)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:138)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:388)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:673)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:610)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1519)
+
+!ENTRY org.eclipse.ui 4 0 2017-03-31 19:54:00.966
+!MESSAGE Unhandled event loop exception
+!STACK 0
+java.lang.StringIndexOutOfBoundsException: String index out of range: 414
+	at java.lang.AbstractStringBuilder.insert(Unknown Source)
+	at java.lang.StringBuffer.insert(Unknown Source)
+	at org.eclipse.ui.internal.console.IOConsolePartition.insert(IOConsolePartition.java:75)
+	at org.eclipse.ui.internal.console.IOConsolePartitioner.documentChanged2(IOConsolePartitioner.java:394)
+	at org.eclipse.jface.text.AbstractDocument.updateDocumentStructures(AbstractDocument.java:671)
+	at org.eclipse.jface.text.AbstractDocument.fireDocumentChanged(AbstractDocument.java:767)
+	at org.eclipse.jface.text.AbstractDocument.replace(AbstractDocument.java:1101)
+	at org.eclipse.jface.text.AbstractDocument.replace(AbstractDocument.java:1119)
+	at org.eclipse.ui.internal.console.ConsoleDocument.replace(ConsoleDocument.java:92)
+	at org.eclipse.ui.internal.console.IOConsoleViewer.handleVerifyEvent(IOConsoleViewer.java:103)
+	at org.eclipse.jface.text.TextViewer$TextVerifyListener.verifyText(TextViewer.java:431)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:274)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4410)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1079)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1103)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1088)
+	at org.eclipse.swt.widgets.Widget.notifyListeners(Widget.java:802)
+	at org.eclipse.swt.custom.StyledText.modifyContent(StyledText.java:7342)
+	at org.eclipse.swt.custom.StyledText.sendKeyEvent(StyledText.java:8225)
+	at org.eclipse.swt.custom.StyledText.doContent(StyledText.java:2530)
+	at org.eclipse.swt.custom.StyledText.handleKey(StyledText.java:6018)
+	at org.eclipse.swt.custom.StyledText.handleKeyDown(StyledText.java:6049)
+	at org.eclipse.swt.custom.StyledText$7.handleEvent(StyledText.java:5733)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4410)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1079)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1103)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1088)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1130)
+	at org.eclipse.swt.widgets.Widget.sendKeyEvent(Widget.java:1126)
+	at org.eclipse.swt.widgets.Widget.wmChar(Widget.java:1547)
+	at org.eclipse.swt.widgets.Control.WM_CHAR(Control.java:4910)
+	at org.eclipse.swt.widgets.Canvas.WM_CHAR(Canvas.java:364)
+	at org.eclipse.swt.widgets.Control.windowProc(Control.java:4791)
+	at org.eclipse.swt.widgets.Canvas.windowProc(Canvas.java:359)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:5102)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessageW(Native Method)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(OS.java:2552)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3814)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$4.run(PartRenderingEngine.java:1121)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1022)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:150)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:687)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:604)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:148)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:138)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:388)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:673)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:610)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1519)

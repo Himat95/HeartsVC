@@ -63,6 +63,7 @@ public class AIPlayer extends Thread implements Player {
 
 		System.out.println("Starting Game|  Player " + this.getPlayerId() + ": " + this.getPlayerHand().getCards());
 
+		
 		this.swap();
 
 		this.clubCheck();
@@ -197,7 +198,9 @@ public class AIPlayer extends Thread implements Player {
 		b = this.getPlayerHand().getCards().stream().filter(x -> x !=a).max(compareByValue).get();
 		c = this.getPlayerHand().getCards().stream().filter(x -> x !=b && x != a).max(compareByValue).get();
 		
-		System.out.println("Player: " + this.playerId + "swapping " + a + b + c);
+		synchronized (table) {
+			
+		System.out.println("Player: " + this.playerId + "swapping [" + a + ", " + b + ", " + c + "]");
 		
 		table.SwapCards(a, b, c, playerId);
 				
@@ -208,17 +211,25 @@ public class AIPlayer extends Thread implements Player {
 				iter.remove();
 			}
 		}
+		}
 		
 		try {
-			this.sleep(1000*40);
+			this.sleep(1000);
 		} catch (InterruptedException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
 		
+		//this.yield();
 		
-		this.getPlayerHand().addCards(table.SwappedCards((this.playerId == 3) ? 0 : playerId+1));
+		
+		synchronized (table) {
+		this.getPlayerHand().addCards(table.SwappedCards((this.playerId == 0) ? 3 : playerId-1));
+		this.getPlayerHand().sortHand();
 		System.out.println("Player: " + this.playerId + "has " + this.getPlayerHand().getCards());
+		}
+		
+		
 		
 		try {
 			this.sleep(2000);
@@ -237,10 +248,14 @@ public class AIPlayer extends Thread implements Player {
 
 	}
 	private synchronized void printScore() {
+		synchronized (trick) {
+			
+		
 		Collections.sort(this.getTrickCardsWon());
 		System.out.println("Player " + this.playerId + ": has finished with the score of " + this.getScore());
 		System.out.println("Player " + this.playerId + ": Trick Cards Won: " + this.getTrickCardsWon());
 		System.out.println("Player " + this.playerId + ": Current Hand: " + this.getPlayerHand() + "\n");
+		}
 	}
 
 	private void throwLowestSuitable() {

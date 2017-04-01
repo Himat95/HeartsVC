@@ -1,0 +1,21 @@
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class TrickTests {
+
+	@Test
+	public void test01() {
+		Trick t = new Trick(); 
+		assertTrue("There are no cards in the newly created trick", t.getTrickCards().isEmpty()); 
+	}
+	
+	@Test
+	public void test02() {
+		Trick t = new Trick(); 
+		Player p = new AIPlayer("Test Dummy", 1, null, t); 
+		t.addtoTrick(new Card(Suit.HEARTS, 12), p);
+		assertTrue("There are no cards in the newly created trick", !t.getTrickCards().isEmpty()); 
+	}
+
+}

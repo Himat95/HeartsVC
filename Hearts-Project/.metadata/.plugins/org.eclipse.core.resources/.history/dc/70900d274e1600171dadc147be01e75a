@@ -1,0 +1,40 @@
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class TableTests {
+
+	@Test
+	public void test01() {
+		Table t = new Table(null, null); 
+		assertTrue("Testing Heart State, its always on at start of a game", t.getHeartState() == true);
+	}
+	
+	@Test
+	public void test02() {
+		Table t = new Table(null, null); 
+		t.setHeartState(false);
+		assertTrue("Testing Heart State, turning it off (Hearts is broken)", !t.getHeartState() == true);
+	}
+	
+	@Test
+	public void test03() {
+		Table t = new Table(null, null); 
+		assertTrue("Testing starting round", t.getRound() == 0);
+	}
+	
+	@Test
+	public void test04() {
+		Table t = new Table(null, null); 
+		t.incRound();
+		assertTrue("Testing increment", t.getRound() == 1);
+	}
+	
+	@Test
+	public void test05() {
+		Table t = new Table(null, null); 
+		assertTrue("Trick starts from 0", t.getTrickNo() == 0);
+	}
+
+
+}

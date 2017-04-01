@@ -254,6 +254,8 @@ public class HumanPlayer extends Thread implements Player {
 		
 		Card a = null, b = null, c = null;
 		
+		synchronized (table) {
+			
 		Integer i = sc.nextInt();
 		String s = sc.next();
 		
@@ -279,17 +281,20 @@ public class HumanPlayer extends Thread implements Player {
 			}
 		}
 		
+		}
 		try {
-			this.sleep(4000);
+			this.sleep(1000);
 		} catch (InterruptedException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
 		
 		
-		this.getPlayerHand().addCards(table.SwappedCards((this.playerId == 3) ? 0 : playerId+1));
+		synchronized (table) {
+		this.getPlayerHand().addCards(table.SwappedCards((this.playerId == 0) ? 3 : playerId-1));
+		this.getPlayerHand().sortHand();
 		System.out.println("Player: " + this.playerId + "has " + this.getPlayerHand().getCards());
-		
+		}
 		try {
 			this.sleep(2000);
 		} catch (InterruptedException e2) {
@@ -327,9 +332,13 @@ public class HumanPlayer extends Thread implements Player {
 
 	}
 	private void printScore() {
+		synchronized (trick) {
+			
+		
 		System.out.println("Player " + this.playerId + ": has finished with the score of " + this.getScore());
 		System.out.println("Player " + this.playerId + ": Trick Cards Won: " + this.getTrickCardsWon());
 		System.out.println("Player " + this.playerId + ": Current Hand: " + this.getPlayerHand() + "\n");
+		}
 	}
 
 

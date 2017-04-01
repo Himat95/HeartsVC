@@ -2,18 +2,20 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="true" key="isRegEx"/>
-		<item value="T" key="selection"/>
+		<item value="Spades" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="false" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="Spades"/>
+			<item value="Sys"/>
+			<item value="sys"/>
 			<item value="t"/>
 			<item value="Player"/>
 			<item value="sh"/>
 			<item value="d"/>
 			<item value="public boolean hasPlayerShotOverTheMoon() {"/>
-			<item value="&#x09;players.get(0).getPlayerHand().addCards(d.dealCards());"/>
 		</list>
 		<list key="replacehistory">
 			<item value="trick"/>

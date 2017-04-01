@@ -1,0 +1,14 @@
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class TableTests {
+
+	@Test
+	public void test() {
+		Table t = new Table(null, null); 
+		
+		assertTrue("Testing Heart State", t.getHeartState() == true);
+	}
+
+}
