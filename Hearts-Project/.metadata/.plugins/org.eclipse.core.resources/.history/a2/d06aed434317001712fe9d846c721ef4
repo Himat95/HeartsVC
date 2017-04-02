@@ -1,0 +1,167 @@
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.concurrent.ArrayBlockingQueue;
+
+import org.junit.Test;
+
+public class GreedyHeuristicTests {
+	
+	public static Comparator<Card> compareByValue = Comparator.comparingInt(Card::getValue);
+	Deck d = new Deck(); 
+	ArrayBlockingQueue<Player> queue = new ArrayBlockingQueue<Player>(2); 
+	Trick t = new Trick(); 
+	Table table = new Table(queue, t); 
+	AIPlayer p = new AIPlayer("Test Dummy", 0, table, t); 
+	
+	
+	/* Due to the difficulty of running threads only for certain instances, this
+	 * test will simply take the algorithm's coding from each situation and test
+	 * it with calculated trick input to predict desirable results. 
+	 * 
+	 * It must be noted that within this test environment, the AIPlayer is given an entire deck (52) 
+	 * cards at its disposal. This will be the true test to understand how the AI can filter out cards
+	 * Dependent on the trick conditions. 
+	 */
+
+	
+	
+	
+//<-------------------------------------Empty Trick with Hearts State Off----------------------------------------------->
+	
+	/* This test is will examine what will the first card thrown by the Player, when the trick
+	 * is empty and having the Heart state off (Allowing him to throw hearts).The predicted results is the
+	 * player will throw the lowest card within the deck, therefore it will be less than the value of 3. 
+	 */
+	@Test
+	public void test01() {
+		queue.add(p);
+		t.clearTrick();
+		
+		//Taken from:	trick.addtoTrick(this.getPlayerHand().getCards().stream().min(compareByValue).get(), this);
+		t.addtoTrick(d.getCards().stream().min(compareByValue).get(), p);
+		System.out.println("Test 01 |  " + t.getTrickCards());
+		assertTrue("Testing when trick is empty with Hearts State off", t.getTrickCards().get(0).getValue() < 3);
+	}
+	
+	
+	
+	/* Similar to test01 however this time 2 of Spades, 2 of Clubs and 2 of Diamonds is removed, to understand if the 
+	 * player truly throws the 2 of hearts when the condition is off. 
+	 * 
+	 * //Taken from:	trick.addtoTrick(this.getPlayerHand().getCards().stream().min(compareByValue).get(), this);
+	 */
+	@Test
+	public void test02() {
+		queue.add(p);
+		t.clearTrick();
+		
+		d.getCards().remove(0); 	// 2 of Spades
+		d.getCards().remove(12);	// 2 of Clubs
+		d.getCards().remove(24);	// 2 of Diamonds
+		
+		
+		t.addtoTrick(d.getCards().stream().min(compareByValue).get(), p);
+		System.out.println("Test 02 |  " + t.getTrickCards());
+		assertTrue("Testing when trick is empty with Hearts State off", t.getTrickCards().get(0).getValue() < 3);
+	}
+	
+	/* Same conditions as the previous tests but this time the lower values less than 7 have been removed, and this is
+	 * to see if the AIPlayer acknowledges that 8 is the minimum value. 
+	 */
+	@Test
+	public void test03() {
+		queue.add(p);
+		t.clearTrick();
+		
+		//the filter only returns cards that are above the value 7. Therefore it returns 8,9,10,jack,queen,king,ace. 
+		t.addtoTrick(d.getCards().stream().filter(x -> x.getValue() > 7).min(compareByValue).get(), p);
+		System.out.println("Test 03 |  " + t.getTrickCards());
+		assertTrue("Testing the minimal card value thrown when trick is empty with Hearts State off", t.getTrickCards().get(0).getValue() == 8);
+	}
+
+	
+
+//<-------------------------------------------Empty Trick with Hearts State On----------------------------------------------->
+	
+	/*	
+	 * 	The tests within this section will demonstrate that the algorithm will not throw hearts until all other suits are
+	 *  depleted from the deck. 
+	 * 
+	 * Taken from:	trick.addtoTrick(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS)
+	 * .min(compareByValue).orElse(this.getPlayerHand().getCards().stream().min(compareByValue).get()), this);
+	 */
+	
+	
+	/*	The first test will remove 2 of Spades, Clubs and Diamonds. Leaving only 2 of Hearts, but the algortihm will make sure to
+	 *  skip this value and go for the next suitable card.
+	 */
+	@Test
+	public void test04() {
+		queue.add(p);
+		t.clearTrick();
+
+		d.getCards().remove(0); 	// 2 of Spades
+		d.getCards().remove(12);	// 2 of Clubs
+		d.getCards().remove(24);	// 2 of Diamonds
+
+		t.addtoTrick(d.getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).min(compareByValue).orElse(d.getCards().stream().min(compareByValue).get()), p);
+		System.out.println("Test 04 |  " + t.getTrickCards());
+		assertTrue("Testing the minimal card value thrown when trick is empty with Hearts State On", t.getTrickCards().get(0).getValue() == 3);
+	}
+	
+	
+	/*	The deck given only contains hearts and this checks if the AI will play hearts when no other option of suits is left. 
+	 * 
+	 */
+	@Test
+	public void test05() {
+		queue.add(p);
+		t.clearTrick();
+
+		Deck d2 = new Deck(); 
+		
+		d2.getCards().clear();
+		
+		for (int i = 2; i <= 14; i++) {
+			d2.getCards().add(new Card(Suit.HEARTS, i)); 
+		}
+		
+		System.out.println("Test 05 |  " + "Deck has: " + d2.getCards());
+
+		t.addtoTrick(d2.getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).min(compareByValue).orElse(d2.getCards().stream().min(compareByValue).get()), p);
+		System.out.println("Test 05 |  " + t.getTrickCards());
+		assertTrue("Testing the minimal card value thrown when trick is empty with Hearts State On", t.getTrickCards().get(0).getValue() == 2);
+	}
+	
+	
+	/*	The deck given only contains hearts cards but one high card is given, this tests proves that even when multiple lower 
+	 * 	cards of Hearts are available, the choice is still strict. 
+	 */
+	@Test
+	public void test06() {
+		queue.add(p);
+		t.clearTrick();
+
+		Deck d2 = new Deck(); 
+		
+		d2.getCards().clear();
+		
+		for (int i = 2; i <= 14; i++) {
+			d2.getCards().add(new Card(Suit.HEARTS, i)); 
+		}
+		
+		d.getCards().add(new Card(Suit.SPADES, 14)); 
+		
+		System.out.println("Test 06 |  " + "Deck has: " + d2.getCards());
+
+		t.addtoTrick(d2.getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).min(compareByValue).orElse(d2.getCards().stream().min(compareByValue).get()), p);
+		System.out.println("Test 06 |  " + t.getTrickCards());
+		assertTrue("Testing the minimal card value thrown when trick is empty with Hearts State On", t.getTrickCards().get(0).getValue() == 14);
+	}
+	
+	
+	//<-------------------------------------------Empty Trick with Hearts State On----------------------------------------------->
+	
+}

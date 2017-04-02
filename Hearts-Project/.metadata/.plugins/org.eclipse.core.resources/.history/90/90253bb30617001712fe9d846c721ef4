@@ -1,0 +1,64 @@
+import static org.junit.Assert.*;
+
+import java.util.Comparator;
+import java.util.concurrent.ArrayBlockingQueue;
+
+import org.junit.Test;
+
+public class GreedyHeuristicTests {
+	
+	public static Comparator<Card> compareByValue = Comparator.comparingInt(Card::getValue);
+	Deck d = new Deck(); 
+	ArrayBlockingQueue<Player> queue = new ArrayBlockingQueue<Player>(2); 
+	Trick t = new Trick(); 
+	Table table = new Table(queue, t); 
+	AIPlayer p = new AIPlayer("Test Dummy", 0, table, t); 
+	
+	
+	/* Due to the difficulty of running threads only for certain instances, this
+	 * test will simply take the algorithm's coding from each situation and test
+	 * it with calculated trick input to predict desirable results. 
+	 */
+
+	@Test
+	public void test01() {
+		queue.add(p);
+		t.clearTrick();
+		
+		//Taken from:	trick.addtoTrick(this.getPlayerHand().getCards().stream().min(compareByValue).get(), this);
+		t.addtoTrick(d.getCards().stream().min(compareByValue).get(), p);
+		System.out.println(t.getTrickCards());
+		assertTrue("Testing the minimal card value thrown when trick is empty with Hearts State off", t.getTrickCards().get(0).getValue() < 3);
+	}
+	
+	@Test
+	public void test02() {
+		queue.add(p);
+		t.clearTrick();
+		
+		d.getCards().remove(0);
+		d.getCards().remove(12);
+		d.getCards().remove(24);
+		
+		//Taken from:	trick.addtoTrick(this.getPlayerHand().getCards().stream().min(compareByValue).get(), this);
+		t.addtoTrick(d.getCards().stream().min(compareByValue).get(), p);
+		System.out.println(t.getTrickCards());
+		assertTrue("Testing the minimal card value thrown when trick is empty with Hearts State off", t.getTrickCards().get(0).getValue() < 3);
+	}
+
+	
+	@Test
+	public void test03() {
+		queue.add(p);
+		t.clearTrick();
+		
+		d.getCards().remove(0);
+		d.getCards().remove(12);
+		d.getCards().remove(24);
+		//Taken from:			trick.addtoTrick(this.getPlayerHand().getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).min(compareByValue).orElse(this.getPlayerHand().getCards().stream().min(compareByValue).get()), this);
+
+		t.addtoTrick(d.getCards().stream().filter(x -> x.getSuit() != Suit.HEARTS).min(compareByValue).orElse(d.getCards().stream().min(compareByValue).get()), p);
+		System.out.println(t.getTrickCards());
+		assertTrue("Testing the minimal card value thrown when trick is empty with Hearts State On", t.getTrickCards().get(0).getValue() < 3);
+	}
+}
