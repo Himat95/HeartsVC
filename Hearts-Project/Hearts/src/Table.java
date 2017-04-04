@@ -14,7 +14,6 @@ public class Table extends Thread {
 	private ArrayBlockingQueue<Player> queue;
 	private boolean play;
 	private boolean results;
-	private int count;
 	private Comparator<Player> comp = (x1 ,x2) -> Integer.compare(x1.getScore(), x2.getScore());
 	private ArrayList<Pair<ArrayList<Card>, Integer>> swappedCards; 
 
@@ -29,7 +28,6 @@ public class Table extends Thread {
 		results = false;
 		this.queue = queue2;
 		this.trick = trick;
-		count=0;
 		swappedCards = new ArrayList<Pair<ArrayList<Card>, Integer>>(); 
 		turn = 5; 
 	}
@@ -56,53 +54,43 @@ public class Table extends Thread {
 
 
 		queue.forEach(x -> x.getPlayerHand().addCards(d.dealCards()));
-		System.out.println("Dealing Cards");
+		System.out.println("<--------------------------------------------------------Game has Started!----------------------------------------------------> \n");
 
 
 		try {
-			this.sleep(2000);
+			sleep(2000);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
 
-/*		queue.forEach(x -> {System.out.println("test1");
-			//Card c = x.getThrownCard().takeMVar();
-			System.out.println("test");
-			if (x.getPlayerHand().lastThrownCard().equals(new Card(Suit.CLUBS, 2))) {
-				//trick.addtoTrick(c);
-				this.setTurn(x);
-			}
-		});*/
 
 		this.setPlay(true);
 		
 		while (this.getTrickNo() !=14) {
 			try {
-				this.sleep(1000);
+				sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
 		}
-		System.out.println("Breaking loop");
+		//System.out.println("Breaking loop");
 		queue.forEach(x -> {
 			if (x.ShotOverTheMoon()) {
 				queue.iterator().forEachRemaining(x2 -> x2.hardScoreReset(26));
 				x.resetScore();
-				System.out.println("Player: " + x.getPlayerId() + " " +
+				System.out.println("Player: " + x.getPlayerName() + " " +
 				x.getPlayerName() + " HAS SHOT OVER THE MOON!");
 			}
 		});
 		try {
-			this.sleep(8000);
+			sleep(8000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		synchronized (trick) {
 		this.setIsGameFinished(true);
-		System.out.println("Winner is... " + queue.stream().min(comp).get());
+		System.out.println("\t\t\t\tWinner is... " + queue.stream().min(comp).get());
 		}
 
 	}

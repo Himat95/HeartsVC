@@ -1,0 +1,28 @@
+
+import java.util.concurrent.ArrayBlockingQueue;
+
+public class ConcurrentGame {
+
+	public static void main(String[] args) {
+
+		ArrayBlockingQueue<Player> queue = new ArrayBlockingQueue<Player>(4);
+
+		Trick trick = new Trick();
+
+		Table table = new Table(queue, trick);
+		Player p = new EasyAIPlayer("Himat", 0, table, trick);
+		Player p2 = new EasyAIPlayer("Raj", 1, table, trick);
+		Player p3 = new EasyAIPlayer("Sunny", 2, table, trick);
+		Player p4 = new EasyAIPlayer("Tarun", 3, table, trick);
+
+		queue.add(p); queue.add(p2); queue.add(p3); queue.add(p4);
+
+		table.start();
+
+		p.start();
+		p2.start();
+		p3.start();
+		p4.start();
+	}
+
+}

@@ -3,7 +3,6 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import org.junit.Test;
@@ -54,6 +53,8 @@ public class GreedyHeuristicTests {
 	 * 
 	 * //Taken from:	trick.addtoTrick(this.getPlayerHand().getCards().stream().min(compareByValue).get(), this);
 	 */
+	
+	
 	@Test
 	public void test02() {
 		queue.add(p);
@@ -85,6 +86,15 @@ public class GreedyHeuristicTests {
 
 	
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
 //<-------------------------------------------Empty Trick with Hearts State On----------------------------------------------->
 	
 	/*	
@@ -162,6 +172,9 @@ public class GreedyHeuristicTests {
 		System.out.println("Test 06 |  " + t.getTrickCards());
 		assertTrue("Testing the minimal card value thrown when trick is empty with Hearts State On", t.getTrickCards().get(0).getValue() == 14);
 	}
+	
+	
+	
 	
 	
 	//<-------------------------------------------A single low value card in trick----------------------------------------------->
@@ -275,6 +288,9 @@ public class GreedyHeuristicTests {
 	}
 	
 
+	
+	
+	
 //<-------------------------------------------A single high value card in trick----------------------------------------------->
 	
 	/*	This test will calculate what happens when the algorithm notices there is a high
@@ -322,6 +338,8 @@ public class GreedyHeuristicTests {
 		assertTrue("The algorthim will try to throw one lower than the card put into the trick",
 				t.getTrickCards().get(1).getValue() == 11);
 	}
+	
+	
 	
 	
 	

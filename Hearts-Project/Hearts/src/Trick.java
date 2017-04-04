@@ -97,13 +97,6 @@ public class Trick {
 		scoreCount = 0;
 	}
 
-/*	public boolean hasPlayerShotOverTheMoon() {
-		if (scoreCount == 26) {
-			return true;
-		}
-			return false;
-	}*/
-
 	public void clearTrick() {
 		trickCards.clear();
 		playerlist.clear();
